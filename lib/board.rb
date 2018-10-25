@@ -28,11 +28,15 @@ class Board
   private
 
   def position_valid?(position)
-    available_positions.include?(position)
+    is_integer?(position) && available_positions.include?(position)
   end
 
   def validation_reason(position)
-    position < 1 || position > @positions.length ? :invalid_position : :position_taken
+    !is_integer?(position) || position < 1 || position > @positions.length ? :invalid_position : :position_taken
+  end
+
+  def is_integer?(position)
+    Integer(position).is_a? Integer rescue false
   end
 
   def apply_token(position, player)

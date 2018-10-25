@@ -36,11 +36,12 @@ describe Board do
       expect(board.errors).to eq [:position_taken]
     end
 
-    it "does not allow a token to be placed in an invalid position" do
-      board = @board.place_token(0, Board::PLAYER_ONE)
-      expect(board.positions).to eq Array.new(9, Board::AVAILABLE_POSITION)
-      expect(board.has_errors?).to be true
-      expect(board.errors).to eq [:invalid_position]
+    [-1, 10, "a", "A", "pos", "£", " ", "", nil].each do |position|
+      it "does not allow tokens to be placed in invalid position: #{position}" do
+        board = @board.place_token(position, Board::PLAYER_ONE)
+        expect(board.has_errors?).to be true
+        expect(board.errors).to eq [:invalid_position]
+      end
     end
 
     it "does not have any errors when token placed in valid position" do

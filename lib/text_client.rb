@@ -1,6 +1,11 @@
 require 'game'
+require 'text_provider'
 
 class TextClient
+  def initialize
+    @text_provider = TextProvider.new
+  end
+
   def start
     game = Game.new()
     play(game) if game.state == :ready
@@ -55,29 +60,7 @@ class TextClient
   end
 
   def print_game_state(state, result, current_player)
-    text = case state
-           when :ready
-             "Great, let's play a game of Tic Tac Toe!"
-           when :ok
-             "Good move."
-           when :wrong_player
-             "Hmm, it seem's like the wrong player took a turn."
-           when :invalid_player
-             "Hmm, it seems like an invalid player was specified."
-           when :invalid_position
-             "Hmm, that position doesn't exist. Try again."
-           when :position_taken
-             "Hmm, you can't play on top of an existing marker. Try again."
-           when :game_over
-             "GAME OVER! #{game_over_reason(result, current_player)}\n\n"
-           else
-             ""
-           end
-    puts "\n#{text}"
-  end
-
-  def game_over_reason(result, current_player)
-    result == :tie ? "It's a tie." : "#{player_text(current_player)} won!"
+    puts "\n#{@text_provider.get_text(state, result, current_player)}"
   end
 
   def print_available_positions(positions)
@@ -87,11 +70,7 @@ class TextClient
   end
 
   def print_get_next_move_prompt(player)
-    print "\nMake a move, #{player_text(player)} > "
-  end
-
-  def player_text(player)
-    player == :player_one ? "Player 1" : "Player 2"
+    print "\nMake a move, #{@text_provider.player_text(player)} > "
   end
 
   def get_next_move(player)

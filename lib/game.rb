@@ -13,12 +13,7 @@ class Game
 
   def make_move(player, position)
     if valid_player?(player) && current_player?(player)
-      token = player == :player_one ? Board::PLAYER_ONE : Board::PLAYER_TWO
-      @board = @board.place_token(position, token)
-      @state = @board.has_errors? ? @board.errors[0] : :ok
-      @state = @decision_engine.game_over?(@board) ? :game_over : @state
-      @result = @decision_engine.result(@board)
-      swap_current_player if @state == :ok
+      apply_move(player, position)
     else
       @state = player_error_reason(player)
     end
@@ -41,6 +36,26 @@ class Game
 
   def current_player?(player)
     @current_player == player
+  end
+
+  def apply_move(player, position)
+    token = board_representation_for_player(player)
+    @board = @board.place_token(position, token)
+    @state = current_game_state
+    @result = @decision_engine.result(@board)
+    swap_current_player if @state == :ok
+  end
+
+  def board_representation_for_player(player)
+    player == :player_one ? Board::PLAYER_ONE : Board::PLAYER_TWO
+  end
+
+  def current_game_state
+    @board.has_error? ? @board.error : maybe_game_over(:ok)
+  end
+
+  def maybe_game_over(or_state)
+    @decision_engine.game_over?(@board) ? :game_over : or_state
   end
 
   def player_error_reason(player)

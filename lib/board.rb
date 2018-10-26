@@ -12,9 +12,7 @@ class Board
   end
 
   def available_positions
-    available = []
-    @positions.each_with_index { |position, index| available << index if position < 0 }
-    available.reject { |pos| pos < 0 }
+    @positions.map.with_index { |position, index| index if position < 0 }.reject(&:nil?)
   end
 
   def place_token(position, player)

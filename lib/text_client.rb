@@ -1,14 +1,9 @@
 require 'game'
 
 class TextClient
-  def initialize()
-    @current_player = :player_one
-  end
-
   def start
     game = Game.new()
     play(game) if game.state == :ready
-    :finished
   end
 
   private
@@ -16,19 +11,19 @@ class TextClient
   def play(game)
     while game.state != :game_over
       update_ui(game)
-      move = get_next_move(@current_player)
-      game = game.make_move(@current_player, move)
-      swap_current_player if game.state == :ok
+      move = get_next_move(game.current_player)
+      game = game.make_move(game.current_player, move)
     end
     update_ui(game)
+    :finished
   end
 
   def update_ui(game)
-    print_game_state(game.state, game.result) if game.state == :ready
+    print_game_state(game.state, game.result, game.current_player) if game.state == :ready
     print_board(game.board_state)
-    print_game_state(game.state, game.result) unless game.state == :ready
+    print_game_state(game.state, game.result, game.current_player) unless game.state == :ready
     print_available_positions(game.available_positions) unless game.state == :game_over
-    print_get_next_move_prompt(@current_player) unless game.state == :game_over
+    print_get_next_move_prompt(game.current_player) unless game.state == :game_over
   end
 
   def print_board(board)
@@ -59,7 +54,7 @@ class TextClient
     puts '-----------'
   end
 
-  def print_game_state(state, result)
+  def print_game_state(state, result, current_player)
     text = case state
            when :ready
              "Great, let's play a game of Tic Tac Toe!"
@@ -74,15 +69,15 @@ class TextClient
            when :position_taken
              "Hmm, you can't play on top of an existing marker. Try again."
            when :game_over
-             "GAME OVER! #{game_over_reason(result)}\n\n"
+             "GAME OVER! #{game_over_reason(result, current_player)}\n\n"
            else
              ""
            end
     puts "\n#{text}"
   end
 
-  def game_over_reason(result)
-    result == :tie ? "It's a tie." : "#{player_text(@current_player)} won!"
+  def game_over_reason(result, current_player)
+    result == :tie ? "It's a tie." : "#{player_text(current_player)} won!"
   end
 
   def print_available_positions(positions)
@@ -101,10 +96,6 @@ class TextClient
 
   def get_next_move(player)
     gets
-  end
-
-  def swap_current_player
-    @current_player = @current_player == :player_one ? :player_two : :player_one
   end
 end
 

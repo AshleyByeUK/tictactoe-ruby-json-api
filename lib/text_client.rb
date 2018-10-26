@@ -74,7 +74,7 @@ class TextClient
            when :position_taken
              "Hmm, you can't play on top of an existing marker. Try again."
            when :game_over
-             "GAME OVER! #{game_over_reason(result)}"
+             "GAME OVER! #{game_over_reason(result)}\n\n"
            else
              ""
            end
@@ -82,15 +82,21 @@ class TextClient
   end
 
   def game_over_reason(result)
-    result == :tie ? "It's a tie." : "#{@current_player} won!"
+    result == :tie ? "It's a tie." : "#{player_text(@current_player)} won!"
   end
 
   def print_available_positions(positions)
-    puts "\nAvailable positions: #{positions}"
+    print "\nAvailable positions: "
+    positions.each { |p| print "#{p} " }
+    print "\n"
   end
 
   def print_get_next_move_prompt(player)
-    print "\nMake a move, #{player} > "
+    print "\nMake a move, #{player_text(player)} > "
+  end
+
+  def player_text(player)
+    player == :player_one ? "Player 1" : "Player 2"
   end
 
   def get_next_move(player)

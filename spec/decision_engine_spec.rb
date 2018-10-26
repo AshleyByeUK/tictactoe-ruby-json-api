@@ -2,16 +2,17 @@ require 'rspec'
 require 'board'
 require 'decision_engine'
 
+ONE = Board::PLAYER_ONE
+TWO = Board::PLAYER_TWO
+EMPTY = Board::AVAILABLE_POSITION
+
 describe DecisionEngine do
   before(:each) do
-    @one = Board::PLAYER_ONE
-    @two = Board::PLAYER_TWO
-    @empty = Board::AVAILABLE_POSITION
     @decision_engine = DecisionEngine.new()
   end
 
   it "is game over with a tie if no winning combination is played" do
-    positions = [@one, @two, @one, @one, @two, @two, @two, @one, @one]
+    positions = [ONE, TWO, ONE, ONE, TWO, TWO, TWO, ONE, ONE]
     board = Board.new(positions)
     expect(@decision_engine.game_over?(board)).to be true
     expect(@decision_engine.result(board)).to eq :tie
@@ -25,14 +26,14 @@ describe DecisionEngine do
 
   it "is game over with a win when a winning combination is played" do
     [
-      [@one, @one, @one, @empty, @empty, @empty, @empty, @empty, @empty],
-      [@empty, @empty, @empty, @one, @one, @one, @empty, @empty, @empty],
-      [@empty, @empty, @empty, @empty, @empty, @empty, @two, @two, @two],
-      [@one, @two, @empty, @one, @two, @empty, @one, @empty, @empty],
-      [@empty, @one, @two, @empty, @one, @two, @empty, @one, @empty],
-      [@empty, @two, @one, @empty, @two, @one, @empty, @empty, @one],
-      [@one, @empty, @empty, @empty, @one, @empty, @empty, @empty, @one],
-      [@empty, @empty, @one, @empty, @one, @empty, @one, @empty, @empty]
+      [ONE, ONE, ONE, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+      [EMPTY, EMPTY, EMPTY, ONE, ONE, ONE, EMPTY, EMPTY, EMPTY],
+      [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, TWO, TWO, TWO],
+      [ONE, TWO, EMPTY, ONE, TWO, EMPTY, ONE, EMPTY, EMPTY],
+      [EMPTY, ONE, TWO, EMPTY, ONE, TWO, EMPTY, ONE, EMPTY],
+      [EMPTY, TWO, ONE, EMPTY, TWO, ONE, EMPTY, EMPTY, ONE],
+      [ONE, EMPTY, EMPTY, EMPTY, ONE, EMPTY, EMPTY, EMPTY, ONE],
+      [EMPTY, EMPTY, ONE, EMPTY, ONE, EMPTY, ONE, EMPTY, EMPTY]
     ].each do |positions|
       board = Board.new(positions)
       expect(@decision_engine.game_over?(board)).to be true
@@ -41,9 +42,10 @@ describe DecisionEngine do
   end
 
   it "does not declare a win on final move to be a tie" do
-    positions = [@one, @two, @one, @two, @one, @one, @two, @two, @one]
+    positions = [ONE, TWO, ONE, TWO, ONE, ONE, TWO, TWO, ONE]
     board = Board.new(positions)
     expect(@decision_engine.game_over?(board)).to be true
     expect(@decision_engine.result(board)).to eq :win
   end
 end
+

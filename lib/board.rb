@@ -28,7 +28,7 @@ class Board
   private
 
   def position_valid?(position)
-    is_integer?(position) && available_positions.include?(position)
+    is_integer?(position) && available_positions.include?(position.to_i)
   end
 
   def validation_reason(position)
@@ -40,12 +40,12 @@ class Board
   end
 
   def is_outside_board_range?(position)
-    position < 0 || position >= @positions.length
+    position.to_i < 0 || position.to_i >= @positions.length
   end
 
   def apply_token(position, player)
     positions = Array.new(@positions)
-    positions[position] = player
+    positions[position.to_i] = player
     Board.new(positions)
   end
 
@@ -54,3 +54,4 @@ class Board
     self
   end
 end
+

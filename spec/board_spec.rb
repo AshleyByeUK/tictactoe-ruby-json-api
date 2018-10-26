@@ -49,5 +49,12 @@ describe Board do
       expect(board.has_error?).to be false
       expect(board.error).to be nil
     end
+
+    it "can place a valid integer passed as a string" do
+      board = @board.place_token("0", Board::PLAYER_ONE)
+      expect(board.has_error?).to be false
+      expect(board.error).to be nil
+    end
   end
 end
+

@@ -25,7 +25,7 @@ module TextClient
         input = @input_provider.get_input()
         case input
         when :exit
-          puts @text_provider.get_text(:quit)
+          puts "\n#{@text_provider.get_text(:quit)}"
           break
         else
           options = configure_game
@@ -37,7 +37,8 @@ module TextClient
     def configure_game
       options = {}
       [:player_one, :player_two].each do |player|
-        puts @text_provider.get_text(:player_type, {player: player})
+        puts "#{@text_provider.get_text(:player_type, {player: player})}\n"
+        print "> "
         input = @input_provider.get_input([1, 2])
         options[player] = player_type(input.to_i)
       end

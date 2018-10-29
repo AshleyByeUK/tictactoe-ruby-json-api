@@ -91,13 +91,13 @@ describe Game do
     end
     it "is human players turn after no moves" do
       expect(@game.last_turn).to be {}
-      expect(@game.next_turn).to eq :human
+      expect(@game.next_turn).to eq :user
     end
 
     it "is computer players turn after one correct human move" do
       game = @game.make_move(:player_one, 0)
       expect(game.last_turn).to include(player_one: 0)
-      expect(game.next_turn).to eq :easy
+      expect(game.next_turn).to eq :computer
     end
 
     it "is human players turn after computer's move" do
@@ -105,7 +105,7 @@ describe Game do
       allow_any_instance_of(EasyStrategy).to receive(:compute_move).and_return(1)
       game = game.make_move(:player_two)
       expect(game.last_turn).to include(player_two: 1)
-      expect(game.next_turn).to eq :human
+      expect(game.next_turn).to eq :user
     end
   end
 end

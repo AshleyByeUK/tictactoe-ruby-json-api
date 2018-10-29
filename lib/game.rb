@@ -1,22 +1,22 @@
 require 'board'
 require 'decision_engine'
+require 'strategy'
 
 class Game
-  attr_reader :current_player, :last_turn, :next_turn, :result, :state
+  attr_reader :current_player, :last_turn, :result, :state
 
   def initialize(player_one_strategy = :human, player_two_strategy = :human)
     @board = Board.new()
     @current_player = :player_one
     @decision_engine = DecisionEngine.new()
     @last_turn = {}
-    @strategies = {player_one: player_one_strategy, player_two: player_two_strategy}
-    @next_turn = @strategies[@current_player]
+    @strategies = build_strategies(player_one_strategy, player_two_strategy)
     @state = :ready
   end
 
   def make_move(player, position = nil)
     if valid_player?(player) && current_player?(player)
-      position = EasyStrategy.new().compute_move(@board) if @strategies[@current_player] == :easy
+      position = @strategies[@current_player].compute_move(@board, position)
       apply_move(player, position)
     else
       @state = player_error_reason(player)
@@ -32,9 +32,17 @@ class Game
     @board.available_positions
   end
 
+  def next_turn
+    @strategies[@current_player].type
+  end
+
   private
 
-  def valid_player?(player)
+  def build_strategies(player_one_strategy, player_two_strategy)
+    {player_one: Strategy.create(player_one_strategy), player_two: Strategy.create(player_two_strategy)}
+  end
+
+ def valid_player?(player)
     player == :player_one || player == :player_two
   end
 
@@ -49,7 +57,6 @@ class Game
     @result = @decision_engine.result(@board)
     @last_turn = {@current_player => position}
     swap_current_player if @state == :ok
-    @next_turn = @strategies[@current_player]
   end
 
   def board_representation_for_player(player)

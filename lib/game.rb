@@ -2,17 +2,21 @@ require 'board'
 require 'decision_engine'
 
 class Game
-  attr_reader :current_player, :result, :state
+  attr_reader :current_player, :last_turn, :next_turn, :result, :state
 
-  def initialize()
+  def initialize(player_one_strategy = :human, player_two_strategy = :human)
     @board = Board.new()
     @current_player = :player_one
     @decision_engine = DecisionEngine.new()
+    @last_turn = {}
+    @strategies = {player_one: player_one_strategy, player_two: player_two_strategy}
+    @next_turn = @strategies[@current_player]
     @state = :ready
   end
 
-  def make_move(player, position)
+  def make_move(player, position = nil)
     if valid_player?(player) && current_player?(player)
+      position = EasyStrategy.new().compute_move(@board) if @strategies[@current_player] == :easy
       apply_move(player, position)
     else
       @state = player_error_reason(player)
@@ -43,7 +47,9 @@ class Game
     @board = @board.place_token(position, token)
     @state = current_game_state
     @result = @decision_engine.result(@board)
+    @last_turn = {@current_player => position}
     swap_current_player if @state == :ok
+    @next_turn = @strategies[@current_player]
   end
 
   def board_representation_for_player(player)

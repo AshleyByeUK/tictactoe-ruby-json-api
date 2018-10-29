@@ -1,6 +1,7 @@
 require 'rspec'
 require 'game'
 require 'board'
+require 'easy_strategy'
 
 describe Game do
   before(:each) do
@@ -82,6 +83,30 @@ describe Game do
     ].each { |move| @game = @game.make_move(move[0], move[1]) }
     expect(@game.state).to eq :game_over
     expect(@game.result).to eq :tie
+  end
+
+  context "player 1 human player vs player 2 computer player" do
+    before(:each) do
+      @game = Game.new(:human, :easy)
+    end
+    it "is human players turn after no moves" do
+      expect(@game.last_turn).to be {}
+      expect(@game.next_turn).to eq :human
+    end
+
+    it "is computer players turn after one correct human move" do
+      game = @game.make_move(:player_one, 0)
+      expect(game.last_turn).to include(player_one: 0)
+      expect(game.next_turn).to eq :easy
+    end
+
+    it "is human players turn after computer's move" do
+      game = @game.make_move(:player_one, 0)
+      allow_any_instance_of(EasyStrategy).to receive(:compute_move).and_return(1)
+      game = game.make_move(:player_two)
+      expect(game.last_turn).to include(player_two: 1)
+      expect(game.next_turn).to eq :human
+    end
   end
 end
 

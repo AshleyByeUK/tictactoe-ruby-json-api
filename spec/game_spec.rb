@@ -15,7 +15,7 @@ describe Game do
   it "allows tokens to be placed on a board" do
     game = @game.make_move(:player_one, 0)
     expect(game.state).to eq :ok
-    expect(game.board_state).to eq [Board::PLAYER_ONE].fill(Board::AVAILABLE_POSITION, 1, 8)
+    expect(game.board_state).to eq [Board::PLAYER_ONE].concat([*1..8])
     expect(game.available_positions).to eq [*1..8]
   end
 
@@ -23,7 +23,7 @@ describe Game do
     game = @game.make_move(:player_one, 0)
     game = game.make_move(:player_two, 0)
     expect(game.state).to eq :position_taken
-    expect(game.board_state).to eq [Board::PLAYER_ONE].fill(Board::AVAILABLE_POSITION, 1, 8)
+    expect(game.board_state).to eq [Board::PLAYER_ONE].concat([*1..8])
     expect(game.available_positions).to eq [*1..8]
   end
 
@@ -48,7 +48,7 @@ describe Game do
   it "correctly places player twos token on the board" do
     game = @game.make_move(:player_one, 0)
     game = game.make_move(:player_two, 1)
-    expect(game.board_state).to eq [Board::PLAYER_ONE, Board::PLAYER_TWO].fill(Board::AVAILABLE_POSITION, 2, 7)
+    expect(game.board_state).to eq [Board::PLAYER_ONE, Board::PLAYER_TWO].concat([*2..8])
     expect(game.available_positions).to eq [*2..8]
   end
 
@@ -84,4 +84,3 @@ describe Game do
     expect(@game.result).to eq :tie
   end
 end
-

@@ -1,8 +1,7 @@
 class Board
-  AVAILABLE_POSITION = -1
-  EMPTY_BOARD = Array.new(9, AVAILABLE_POSITION)
-  PLAYER_ONE = 1
-  PLAYER_TWO = 2
+  EMPTY_BOARD = (0..8).to_a
+  PLAYER_ONE = 'X'
+  PLAYER_TWO = 'O'
 
   attr_reader :error, :positions
 
@@ -12,7 +11,7 @@ class Board
   end
 
   def available_positions
-    @positions.map.with_index { |position, index| index if position < 0 }.reject(&:nil?)
+    @positions.select { |pos| pos.is_a?(Integer) }
   end
 
   def place_token(position, player)
@@ -34,7 +33,7 @@ class Board
   end
 
   def is_integer?(position)
-    Integer(position).is_a? Integer rescue false
+    position.is_a?(Integer) || position =~ /\A[-+]?[0-9]+/
   end
 
   def is_outside_board_range?(position)
@@ -52,4 +51,3 @@ class Board
     self
   end
 end
-

@@ -8,7 +8,7 @@ class TextClient
 
   def start
     game = Game.new()
-    play(game) if game.state == :ready
+    play(game)
   end
 
   private
@@ -46,9 +46,9 @@ class TextClient
 
   def marker_for(id)
     case id
-    when 1
+    when 'X'
       "X"
-    when 2
+    when 'O'
       "O"
     else
       " "
@@ -77,4 +77,3 @@ class TextClient
     gets
   end
 end
-

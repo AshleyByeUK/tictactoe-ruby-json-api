@@ -1,5 +1,4 @@
-require 'text_client'
+require 'text_client/text_client'
 
-client = TextClient.new
+client = TextClient::TextClient.new
 client.start
-

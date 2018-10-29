@@ -43,9 +43,9 @@ module TextClient
 
     def marker_for(id)
       case id
-      when 1
+      when 'X'
         "X"
-      when 2
+      when 'O'
         "O"
       else
         " "
@@ -72,7 +72,6 @@ module TextClient
 
     def get_next_move
       @input_provider.get_input(@game.available_positions, "Invalid position, please try again.")
-      # input == :exit ? (puts(@text_provider.get_text(:quit)); exit) : input
     end
   end
 end

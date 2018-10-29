@@ -2,10 +2,6 @@ require 'rspec'
 require 'game/board'
 
 module Game
-  ONE = Board::PLAYER_ONE
-  TWO = Board::PLAYER_TWO
-  EMPTY = Board::AVAILABLE_POSITION
-
   describe Board do
     context "a 3x3 board" do
       before(:each) do
@@ -13,29 +9,29 @@ module Game
       end
 
       it "has 9 available positions" do
-        expect(@board.positions).to eq Array.new(9, Board::AVAILABLE_POSITION)
+        expect(@board.positions).to eq [*0..8]
         expect(@board.available_positions). to eq [*0..8]
       end
 
       it "returns a new board after placing a token" do
         updated_board = @board.place_token(0, Board::PLAYER_ONE)
-        expect(@board.positions).to eq Array.new(9, Board::AVAILABLE_POSITION)
+        expect(@board.positions).to eq [*0..8]
         expect(@board.available_positions).to eq [*0..8]
-        expect(updated_board.positions).to eq [Board::PLAYER_ONE].fill(Board::AVAILABLE_POSITION, 1, 8)
+        expect(updated_board.positions).to eq [Board::PLAYER_ONE].concat([*1..8])
         expect(updated_board.available_positions).to eq [*1..8]
       end
 
       it "can place a token for player 1 and player 2" do
         board = @board.place_token(0, Board::PLAYER_ONE)
         board = board.place_token(1, Board::PLAYER_TWO)
-        expect(board.positions).to eq [Board::PLAYER_ONE, Board::PLAYER_TWO].fill(Board::AVAILABLE_POSITION, 2, 7)
+        expect(board.positions).to eq [Board::PLAYER_ONE, Board::PLAYER_TWO].concat([*2..8])
         expect(board.available_positions).to eq [*2..8]
       end
 
       it "does not allow a token to be placed over an existing token" do
         board = @board.place_token(0, Board::PLAYER_ONE)
         board = board.place_token(0, Board::PLAYER_TWO)
-        expect(board.positions).to eq [Board::PLAYER_ONE].fill(Board::AVAILABLE_POSITION, 1, 8)
+        expect(board.positions).to eq [Board::PLAYER_ONE].concat([*1..8])
         expect(board.available_positions).to eq [*1..8]
         expect(board.has_error?).to be true
         expect(board.error).to eq :position_taken

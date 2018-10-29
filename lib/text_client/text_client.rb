@@ -55,7 +55,7 @@ module TextClient
     def play_game(options)
       game = Game::Game.new(options[:player_one], options[:player_two])
       game_client = TextClientGame.new(game, @text_provider, @input_provider)
-      game_client.play if game.state == :ready
+      game_client.play
     end
   end
 end

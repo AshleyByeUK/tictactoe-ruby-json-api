@@ -10,11 +10,6 @@ module TextClient
   EASY = '2'
   QUIT = 'quit'
   RETURN = "\n"
-  ONE = '0'
-  TWO = '1'
-  THREE = '2'
-  FOUR = '3'
-  FIVE = '4'
 
   describe TextClient do
     before(:all) do
@@ -47,17 +42,17 @@ module TextClient
 
     context "human vs human" do
       it "can start and end a game" do
-        allow_any_instance_of(InputProvider).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, ONE, FOUR, TWO, FIVE, THREE, QUIT)
+        allow_any_instance_of(InputProvider).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', '3', '1', '4', '2', QUIT)
         expect(@client.start).to eq :finished
       end
 
       it "does not change player when invalid input is entered" do
-        allow_any_instance_of(InputProvider).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, ONE, 'BAD', FOUR, TWO, FIVE, THREE, QUIT)
+        allow_any_instance_of(InputProvider).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', 'BAD', '3', '1', '4', '2', QUIT)
         expect(@client.start).to eq :finished
       end
 
       it "does not change player when a duplicate position is given" do
-        allow_any_instance_of(InputProvider).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, ONE, ONE, FOUR, TWO, FIVE, THREE, QUIT)
+        allow_any_instance_of(InputProvider).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', '0', '3', '1', '4', '2', QUIT)
         expect(@client.start).to eq :finished
       end
     end

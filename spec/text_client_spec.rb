@@ -22,20 +22,20 @@ describe TextClient do
     @original_stderr = nil
   end
 
-  # context "human vs human" do
-  #   it "can start and end a game" do
-  #     allow(@client).to receive(:gets).and_return(0, 3, 1, 4, 2)
-  #     expect(@client.start).to eq :finished
-  #   end
+  context "human vs human" do
+    it "can start and end a game" do
+      allow(@client).to receive(:gets).and_return(0, 3, 1, 4, 2)
+      expect(@client.start).to eq :finished
+    end
 
-  #   it "does not change player when invalid input is entered" do
-  #     allow(@client).to receive(:gets).and_return(0, 'BAD', 3, 1, 4, 2)
-  #     expect(@client.start).to eq :finished
-  #   end
+    it "does not change player when invalid input is entered" do
+      allow(@client).to receive(:gets).and_return(0, 'BAD', 3, 1, 4, 2)
+      expect(@client.start).to eq :finished
+    end
 
-  #   it "does not change player when a duplicate position is given" do
-  #     allow(@client).to receive(:gets).and_return(0, 0, 3, 1, 4, 2)
-  #     expect(@client.start).to eq :finished
-  #   end
-  # end
+    it "does not change player when a duplicate position is given" do
+      allow(@client).to receive(:gets).and_return(0, 0, 3, 1, 4, 2)
+      expect(@client.start).to eq :finished
+    end
+  end
 end

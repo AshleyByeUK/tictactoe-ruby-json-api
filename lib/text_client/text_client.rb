@@ -18,12 +18,10 @@ module TextClient
 
     private
 
-    ###
     def main_ui_loop
       loop do
-        puts @text_provider.get_text(:play_a_game)
-        input = @input_provider.get_input()
-        case input
+        puts "\n#{@text_provider.get_text(:play_a_game)}"
+        case @input_provider.get_input()
         when :exit
           puts "\n#{@text_provider.get_text(:quit)}"
           break
@@ -39,7 +37,7 @@ module TextClient
       [:player_one, :player_two].each do |player|
         puts "#{@text_provider.get_text(:player_type, {player: player})}\n"
         print "> "
-        input = @input_provider.get_input([1, 2])
+        input = @input_provider.get_input([1, 2], 'Invalid option, please try again.')
         options[player] = player_type(input.to_i)
       end
       options

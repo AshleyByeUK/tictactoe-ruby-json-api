@@ -10,6 +10,7 @@ module TextClient
       while @game.state != :game_over
         update_ui
         move = @game.next_turn == :user ? get_next_move : nil
+        break if move == :exit
         @game = @game.make_move(@game.current_player, move)
       end
       update_ui
@@ -70,14 +71,8 @@ module TextClient
     end
 
     def get_next_move
-      input = @input_provider.get_input(@game.available_positions)
-      case input
-      when :exit
-        puts @text_provider.get_text(:quit)
-        # exit?
-      else
-        input
-      end
+      @input_provider.get_input(@game.available_positions, "Invalid position, please try again.")
+      # input == :exit ? (puts(@text_provider.get_text(:quit)); exit) : input
     end
   end
 end

@@ -1,5 +1,5 @@
 require 'game/board'
-require 'game/decision_engine'
+require 'game/game_rules'
 require 'game/strategy'
 
 module Game
@@ -9,7 +9,7 @@ module Game
     def initialize(player_one_strategy = :human, player_two_strategy = :human)
       @board = Board.new()
       @current_player = :player_one
-      @decision_engine = DecisionEngine.new()
+      @rules = GameRules.new()
       @last_turn = {}
       @strategies = build_strategies(player_one_strategy, player_two_strategy)
       @state = :ready
@@ -55,7 +55,7 @@ module Game
       token = board_representation_for_player(player)
       @board = @board.place_token(position, token)
       @state = current_game_state
-      @result = @decision_engine.result(@board)
+      @result = @rules.game_result(@board)
       @last_turn = {@current_player => position}
       swap_current_player if @state == :ok
     end
@@ -69,7 +69,7 @@ module Game
     end
 
     def maybe_game_over(or_state)
-      @decision_engine.game_over?(@board) ? :game_over : or_state
+      @rules.game_over?(@board) ? :game_over : or_state
     end
 
     def player_error_reason(player)

@@ -1,11 +1,11 @@
 module Game
-  class DecisionEngine
+  class GameRules
     def game_over?(board)
       win?(board) || tie?(board)
     end
 
-    def result(board)
-      game_over?(board) ? game_result(board) : :playing
+    def game_result(board)
+      game_over?(board) ? game_over_reason(board) : :playing
     end
 
     private
@@ -30,7 +30,7 @@ module Game
       board.available_positions.empty?
     end
 
-    def game_result(board)
+    def game_over_reason(board)
       win?(board) ? :win : :tie
     end
   end

@@ -2,19 +2,20 @@ require 'rspec'
 require 'board'
 require 'decision_engine'
 
+P1 = Board::PLAYER_ONE
+P2 = Board::PLAYER_TWO
+
 describe DecisionEngine do
   before(:each) do
-    @one = Board::PLAYER_ONE
-    @two = Board::PLAYER_TWO
-    @empty = Board::AVAILABLE_POSITION
     @decision_engine = DecisionEngine.new()
   end
 
   it "is game over with a tie if no winning combination is played" do
-    positions = [@one, @two, @one, @one, @two, @two, @two, @one, @one]
+    positions = [P1, P2, P1, P1, P2, P2, P2, P1, P1]
     board = Board.new(positions)
-    expect(@decision_engine.game_over?(board)).to be true
-    expect(@decision_engine.result(board)).to eq :tie
+    de = DecisionEngine.new()
+    expect(de.game_over?(board)).to be true
+    expect(de.result(board)).to eq :tie
   end
 
   it "is not game over when no win and no tie" do
@@ -25,14 +26,14 @@ describe DecisionEngine do
 
   it "is game over with a win when a winning combination is played" do
     [
-      [@one, @one, @one, @empty, @empty, @empty, @empty, @empty, @empty],
-      [@empty, @empty, @empty, @one, @one, @one, @empty, @empty, @empty],
-      [@empty, @empty, @empty, @empty, @empty, @empty, @two, @two, @two],
-      [@one, @two, @empty, @one, @two, @empty, @one, @empty, @empty],
-      [@empty, @one, @two, @empty, @one, @two, @empty, @one, @empty],
-      [@empty, @two, @one, @empty, @two, @one, @empty, @empty, @one],
-      [@one, @empty, @empty, @empty, @one, @empty, @empty, @empty, @one],
-      [@empty, @empty, @one, @empty, @one, @empty, @one, @empty, @empty]
+      [P1, P1, P1, 3,  4, 5, 6, 7, 8],
+      [0, 1, 2, P1, P1, P1, 6, 7, 8],
+      [0, 1, 2, 3, 4, 5, P2, P2, P2],
+      [P1, P2, 2, P1, P2, 5, P1, 7, 8],
+      [0, P1, P2, 3, P1, P2, 6, P1, 8],
+      [0, P2, P1, 3, P2, P1, 6, 7, P1],
+      [P1, 1, 2, 3, P1, 5, 6, 7, P1],
+      [0, 1, P1, 3, P1, 5, P1, 7, 8]
     ].each do |positions|
       board = Board.new(positions)
       expect(@decision_engine.game_over?(board)).to be true
@@ -41,7 +42,7 @@ describe DecisionEngine do
   end
 
   it "does not declare a win on final move to be a tie" do
-    positions = [@one, @two, @one, @two, @one, @one, @two, @two, @one]
+    positions = [P1, P2, P1, P2, P1, P1, P2, P2, P1]
     board = Board.new(positions)
     expect(@decision_engine.game_over?(board)).to be true
     expect(@decision_engine.result(board)).to eq :win

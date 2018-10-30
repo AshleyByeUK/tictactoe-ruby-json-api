@@ -3,5 +3,5 @@ rvm:
   - 2.5.2
 install: bundle install
 script:
+  - gem install bundler
   - bundle exec rspec --format doc
-

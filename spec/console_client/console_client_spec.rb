@@ -1,13 +1,13 @@
-require 'text_client/text_client'
+require 'console_client/console_client'
 require 'game/game'
 
-module TextClient
+module ConsoleClient
   HUMAN = '1'
   EASY = '2'
   QUIT = 'quit'
   RETURN = "\n"
 
-  describe TextClient do
+  describe ConsoleClient do
     before(:all) do
       @original_stdout = $stdout
       @original_stderr = $stderr
@@ -16,7 +16,7 @@ module TextClient
     end
 
     before(:each) do
-      @client = TextClient.new
+      @client = ConsoleClient.new
     end
 
     after(:all) do
@@ -27,35 +27,35 @@ module TextClient
     end
 
     it "exits when 'quit' is typed in main menu" do
-      allow_any_instance_of(TextClient).to receive(:gets).and_return('quit')
+      allow_any_instance_of(ConsoleClient).to receive(:gets).and_return('quit')
       expect(@client.start).to eq :finished
     end
 
     it "ignores case and exits when 'QUIT' is typed in main menu" do
-      allow_any_instance_of(TextClient).to receive(:gets).and_return('QUIT')
+      allow_any_instance_of(ConsoleClient).to receive(:gets).and_return('QUIT')
       expect(@client.start).to eq :finished
     end
 
     context "human vs human" do
       it "can start and end a game" do
-        allow_any_instance_of(TextClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', '3', '1', '4', '2', QUIT)
+        allow_any_instance_of(ConsoleClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', '3', '1', '4', '2', QUIT)
         expect(@client.start).to eq :finished
       end
 
       it "does not change player when invalid input is entered" do
-        allow_any_instance_of(TextClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', 'BAD', '3', '1', '4', '2', QUIT)
+        allow_any_instance_of(ConsoleClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', 'BAD', '3', '1', '4', '2', QUIT)
         expect(@client.start).to eq :finished
       end
 
       it "does not change player when a duplicate position is given" do
-        allow_any_instance_of(TextClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', '0', '3', '1', '4', '2', QUIT)
+        allow_any_instance_of(ConsoleClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', '0', '3', '1', '4', '2', QUIT)
         expect(@client.start).to eq :finished
       end
     end
 
     context "computer vs computer" do
       before(:each) do
-        allow_any_instance_of(TextClient).to receive(:gets).and_return(RETURN, EASY, EASY, QUIT)
+        allow_any_instance_of(ConsoleClient).to receive(:gets).and_return(RETURN, EASY, EASY, QUIT)
       end
 
       it "can play until a tie or win is achieved" do

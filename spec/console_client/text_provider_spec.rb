@@ -1,6 +1,6 @@
-require 'text_client/text_provider'
+require 'console_client/text_provider'
 
-module TextClient
+module ConsoleClient
   describe TextProvider do
     context "British English" do
       before(:each) do

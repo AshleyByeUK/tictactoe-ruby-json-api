@@ -1,4 +1,4 @@
-module TextClient
+module ConsoleClient
   class TextProvider
     def get_text(text, options = {})
       case text

@@ -1,4 +1,4 @@
-require 'text_client/text_client'
+require 'console_client/console_client'
 
-client = TextClient::TextClient.new
+client = ConsoleClient::ConsoleClient.new
 client.start

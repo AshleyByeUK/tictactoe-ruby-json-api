@@ -1,8 +1,8 @@
 require 'game/game'
-require 'text_client/text_provider'
+require 'console_client/text_provider'
 
-module TextClient
-  class TextClient
+module ConsoleClient
+  class ConsoleClient
     def initialize
       @text_provider = TextProvider.new
     end

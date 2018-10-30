@@ -1,4 +1,3 @@
-require 'rspec'
 require 'text_client/text_provider'
 
 module TextClient

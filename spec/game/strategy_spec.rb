@@ -1,4 +1,3 @@
-require 'rspec'
 require 'game/strategy'
 
 module Game

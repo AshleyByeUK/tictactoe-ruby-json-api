@@ -1,4 +1,3 @@
-require 'rspec'
 require 'game/board'
 
 module Game

@@ -1,5 +1,3 @@
-require 'rspec'
-require 'rspec/mocks'
 require 'text_client/text_client'
 require 'game/game'
 

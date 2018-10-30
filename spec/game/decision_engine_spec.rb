@@ -1,4 +1,3 @@
-require 'rspec'
 require 'game/board'
 require 'game/decision_engine'
 

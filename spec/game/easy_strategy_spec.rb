@@ -1,4 +1,3 @@
-require 'rspec'
 require 'game/easy_strategy'
 require 'game/board'
 

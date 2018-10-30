@@ -1,6 +1,6 @@
 module Game
   class Board
-    EMPTY_BOARD = (0..8).to_a
+    EMPTY_BOARD = (1..9).to_a
     PLAYER_ONE = 'X'
     PLAYER_TWO = 'O'
 
@@ -38,12 +38,12 @@ module Game
     end
 
     def is_outside_board_range?(position)
-      position.to_i < 0 || position.to_i >= @positions.length
+      position.to_i < 1 || position.to_i > @positions.length
     end
 
     def apply_token(position, player)
       positions = Array.new(@positions)
-      positions[position.to_i] = player
+      positions[position.to_i - 1] = player
       Board.new(positions)
     end
 

@@ -38,17 +38,17 @@ module ConsoleClient
 
     context "human vs human" do
       it "can start and end a game" do
-        allow_any_instance_of(ConsoleClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', '3', '1', '4', '2', QUIT)
+        allow_any_instance_of(ConsoleClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '1', '4', '2', '5', '3', QUIT)
         expect(@client.start).to eq :finished
       end
 
       it "does not change player when invalid input is entered" do
-        allow_any_instance_of(ConsoleClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', 'BAD', '3', '1', '4', '2', QUIT)
+        allow_any_instance_of(ConsoleClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '1', 'BAD', '4', '2', '5', '3', QUIT)
         expect(@client.start).to eq :finished
       end
 
       it "does not change player when a duplicate position is given" do
-        allow_any_instance_of(ConsoleClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '0', '0', '3', '1', '4', '2', QUIT)
+        allow_any_instance_of(ConsoleClient).to receive(:gets).and_return(RETURN, HUMAN, HUMAN, '1', '1', '4', '2', '5', '3', QUIT)
         expect(@client.start).to eq :finished
       end
     end

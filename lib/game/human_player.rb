@@ -1,5 +1,5 @@
 module Game
-  class HumanStrategy
+  class HumanPlayer
     attr_reader :name, :type
 
     def initialize()

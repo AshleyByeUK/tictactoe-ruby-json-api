@@ -1,6 +1,6 @@
 require 'game/board'
 require 'game/game_rules'
-require 'game/strategy'
+require 'game/player'
 
 module Game
   class Game
@@ -40,7 +40,7 @@ module Game
     private
 
     def build_strategies(player_one_strategy, player_two_strategy)
-      {player_one: Strategy.create(player_one_strategy), player_two: Strategy.create(player_two_strategy)}
+      {player_one: Player.create(player_one_strategy), player_two: Player.create(player_two_strategy)}
     end
 
   def valid_player?(player)

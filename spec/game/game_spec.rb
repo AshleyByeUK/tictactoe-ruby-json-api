@@ -1,6 +1,6 @@
 require 'game/game'
 require 'game/board'
-require 'game/easy_strategy'
+require 'game/easy_player'
 
 module Game
   describe Game do
@@ -102,7 +102,7 @@ module Game
 
       it "is human players turn after computer's move" do
         game = @game.make_move(:player_one, 0)
-        allow_any_instance_of(EasyStrategy).to receive(:compute_move).and_return(1)
+        allow_any_instance_of(EasyPlayer).to receive(:compute_move).and_return(1)
         game = game.make_move(:player_two)
         expect(game.last_turn).to include(player_two: 1)
         expect(game.next_turn).to eq :user

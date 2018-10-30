@@ -1,5 +1,5 @@
 module Game
-  class EasyStrategy
+  class EasyPlayer
     attr_reader :name, :type
 
     def initialize()

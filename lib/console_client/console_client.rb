@@ -8,6 +8,7 @@ module ConsoleClient
     end
 
     def start
+      system "clear"
       puts @text_provider.get_text(:welcome)
       main_ui_loop
       :finished
@@ -37,12 +38,14 @@ module ConsoleClient
           options = configure_game
           play_game(options)
         end
+        system "clear"
       end
     end
 
     def configure_game
       options = {}
       [:player_one, :player_two].each do |player|
+        system "clear"
         puts "#{@text_provider.get_text(:player_type, {player: player})}\n"
         print "> "
         input = get_input([1, 2], 'Invalid option, please try again.')
@@ -69,10 +72,12 @@ module ConsoleClient
         game = game.make_move(game.current_player, move)
       end
       update_ui(game)
+      get_input([], '', '')
       :finished
     end
 
     def update_ui(game)
+      system "clear"
       print_game_state(game) if game.state == :ready
       print_board(game)
       print_game_state(game) unless game.state == :ready

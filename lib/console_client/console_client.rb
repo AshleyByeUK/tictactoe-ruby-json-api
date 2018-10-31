@@ -11,7 +11,9 @@ module ConsoleClient
     end
 
     def start
-      display_main_menu
+      loop do
+        display_main_menu
+      end
       :finished
     end
 
@@ -28,16 +30,29 @@ module ConsoleClient
 
     private
 
+    def get_input_from_user(valid_input, error_message = :invalid_selection, prompt = '')
+      begin
+        display_prompt(prompt)
+        input = get_input(valid_input)
+        @io.puts(@text_provider.get_text(error_message)) if input.state == :invalid_input
+      end until input.state == :valid_input
+      if input.value == :exit
+        quit
+      else
+        input.value
+      end
+    end
+
     def clear_screen
       @io.system("clear")
     end
 
-    def display_prompt
-      @io.print("> ")
+    def display_prompt(prompt = '')
+      @io.print("#{prompt}> ")
     end
 
     def quit
-      puts "QUITTING!"
+      @io.puts(@text_provider.get_text(:quit))
       exit
     end
 
@@ -46,16 +61,10 @@ module ConsoleClient
       @io.puts(@text_provider.get_text(:title))
       @io.puts(@text_provider.get_text(:help))
       @io.puts(@text_provider.get_text(:main_menu))
-      begin
-        display_prompt
-        input = get_input(['1', '2'])
-        @io.puts(@text_provider.get_text(:invalid_selection)) if input.state == :invalid_input
-      end until input.state == :valid_input
-      quit if input.value == :exit
-      case input.value.to_i
+      case get_input_from_user(['1', '2']).to_i
       when 1
-        player_one = configure_player(:player_one, 'X')
-        player_two = configure_player(:player_two, 'O')
+        player_one = configure_player(1, 'X')
+        player_two = configure_player(2, 'O')
         play_game(player_one, player_two)
         display_return_to_main_menu
       when 2
@@ -66,13 +75,7 @@ module ConsoleClient
     def configure_player(player, token)
       clear_screen
       @io.puts(@text_provider.get_text(:configure_player, {player: player}))
-      begin
-        display_prompt
-        input = get_input(['1', '2'])
-        @io.puts(@text_provider.get_text(:invalid_selection)) if input.state == :invalid_input
-      end until input.state == :valid_input
-      quit if input.value == :exit
-      case input.value.to_i
+      case get_input_from_user(['1', '2']).to_i
       when 1
         Game::Player.create(:human, token)
       when 2
@@ -80,40 +83,26 @@ module ConsoleClient
       end
     end
 
-    def display_return_to_main_menu
-      @io.puts(@text_provider.get_text(:return_to_main_menu))
-    end
-
     def play_game(player_one, player_two)
       game = Game::Game.new([player_one, player_two])
-      while game.state != :game_over
-        update_ui(game)
-        move = game.players[game.current_player].type == :user ? get_next_move(game) : nil
-        break if move == :exit
-        game = game.make_move(game.current_player, move)
+      while ![:win, :tie].include?(game.result)
+        clear_screen
+        display_board(game.current_board)
+        display_game_state(game.state)
+        if game.players[game.current_player - 1].name == :human
+          prompt = "#{@text_provider.get_text(game.current_player)} "
+          input = get_input_from_user(game.available_positions, :bad_position, prompt)
+          game = game.make_move(game.current_player, input.to_i)
+        else
+          game = game.make_move(game.current_player)
+        end
       end
-      update_ui(game)
-    end
-
-
-
-
-
-    def update_ui(game)
       clear_screen
-      print_game_state(game) if game.state == :ready
-      print_board(game)
-      print_game_state(game) unless game.state == :ready
-      print_available_positions(game) unless game.state == :game_over || game.players[game.current_player].type == :computer
-      print_get_next_move_prompt(game) unless game.state == :game_over || game.players[game.current_player].type == :computer
+      display_board(game.current_board)
+      display_final_result(game.result, game.current_player)
     end
 
-    def print_game_state(game)
-      @io.puts "\n#{@text_provider.get_text(game.state, {result: game.result, player: game.current_player})}"
-    end
-
-    def print_board(game)
-      board = game.current_board
+    def display_board(board)
       @io.puts ""
       draw_row(board[0], board[1], board[2])
       draw_spacer_row
@@ -123,40 +112,26 @@ module ConsoleClient
     end
 
     def draw_row(a, b, c)
-      @io.puts " #{marker_for(a)} | #{marker_for(b)} | #{marker_for(c)} "
-    end
-
-    def marker_for(id)
-      case id
-      when 'X'
-        "X"
-      when 'O'
-        "O"
-      else
-        " "
-      end
+      @io.puts(" #{a} | #{b} | #{c} ")
     end
 
     def draw_spacer_row
-      @io.puts '-----------'
+      @io.puts('-----------')
     end
 
-    def print_available_positions(game)
-      print "\nAvailable positions: "
-      game.available_positions.each { |p| print "#{p} " }
-      print "\n"
+    def display_game_state(state)
+      @io.puts("\n#{@text_provider.get_text(state)}")
     end
 
-    def print_get_next_move_prompt(game)
-      print "\nMake a move, #{@text_provider.player_text(game.current_player)} > "
+    def display_final_result(result, player)
+      options = {player: player}
+      @io.puts("#{@text_provider.get_text(result, options)}")
     end
 
-    def get_next_move(game)
-      get_input(game.available_positions)
-    end
-
-    def input_valid?(input, valid_input, quit_commands)
-      quit_commands.include?(input) || valid_input.map(&:to_s).include?(input) || valid_input.empty?
+    def display_return_to_main_menu
+      @io.puts(@text_provider.get_text(:return_to_main_menu))
+      input = get_input_from_user(['y', 'n'])
+      quit if input == 'n'
     end
   end
 end

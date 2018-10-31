@@ -2,52 +2,37 @@ module ConsoleClient
   class TextProvider
     def get_text(text, options = {})
       case text
-      when :player_one
-        "Player 1"
-      when :player_two
-        "Player 2"
+      when 1
+        'Player 1'
+      when 2
+        'Player 2'
       when :title
         welcome_text
       when :help
         "Type 'quit' at any time to exit TicTacToe."
       when :main_menu
-        "1. Play a game\n2. Quit"
+        "1. Play a game.\n2. Quit."
       when :configure_player
-        "Choose a player type for #{get_text(options[:player])}:\n\n1. Human\n2. Easy computer"
+        "Choose a player type for #{get_text(options[:player])}:\n\n1. Human.\n2. Easy computer."
       when :return_to_main_menu
         "Return to main menu? (Y/N)"
       when :invalid_selection
-        "That option was not recognised, please try again."
-
-
+        'That option was not recognised, please try again.'
       when :ready
-        "Great, let's play a game of Tic Tac Toe!"
+        ''
       when :ok
-        "Good move."
-      when :wrong_player
-        "Hmm, it seem's like the wrong player took a turn."
-      when :invalid_player
-        "Hmm, it seems like an invalid player was specified."
-      when :invalid_position
-        "Hmm, that position doesn't exist. Try again."
-      when :position_taken
-        "Hmm, you can't play on top of an existing marker. Try again."
-      when :game_over
-        "GAME OVER! #{game_over_reason(options[:result], options[:player])}\n\n"
-
-      when :player_type
-        "Choose a player type for #{player_text(options[:player])}:\n\n1. Human\n2. Easy computer\n"
-      when :play_a_game
-        "Play a game of TicTacToe. Press any key to continue or type 'quit' to exit."
+        'Good move.'
+      when :bad_position
+        "You can't place a token there. Try again."
+      when :win
+        "GAME OVER! #{get_text(options[:player])} won!"
+      when :tie
+        "GAME OVER! It's a tie."
       when :quit
-        "Thanks for playing TicTacToe."
+        'Thanks for playing TicTacToe.'
       else
-        "Oops. An unexpected event occurred."
+        'Sorry, something unexpected occurred.'
       end
-    end
-
-    def player_text(player)
-      player == :player_one ? "Player 1" : "Player 2"
     end
 
     private
@@ -59,10 +44,6 @@ module ConsoleClient
       "   | |  | |/ __| |/ _` |/ __| |/ _ \\ / _ \\ \n" +
       "   | |  | | (__| | (_| | (__| | (_) |  __/ \n" +
       "   |_|  |_|\\___|_|\\__,_|\\___|_|\\___/ \\___| \n\n\n"
-    end
-
-    def game_over_reason(result, player)
-      result == :tie ? "It's a tie." : "#{player_text(player)} won!"
     end
   end
 end

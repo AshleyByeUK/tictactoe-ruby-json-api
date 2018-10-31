@@ -15,7 +15,7 @@ module ConsoleClient
     end
 
     context "getting user input" do
-      ['-1', '10', 'a', 'A', 'pos', '£', ' ', '', nil].each do |position|
+      ['-1', '10', 'a', 'A', 'pos', '£', ' '].each do |position|
         it "does not allow tokens to be placed in invalid position: #{position}" do
           @io.init(position)
           input = @client.get_input([1, 2, 3, 4, 5, 6, 7, 8, 9], 'quit')
@@ -43,36 +43,45 @@ module ConsoleClient
       end
     end
 
-    # context "main menu" do
-    #   it "exits when 'quit' is typed in main menu" do
-    #     @io.init(QUIT)
-    #     # expect(@io.gets_count).to eq 1
-    #     expect(@client.start).to raise_error SystemExit
-    #   end
-    # end
+    context "test which call 'exit'" do
+      around(:each) do |test|
+        begin
+          test.run
+        rescue SystemExit
+        end
+      end
 
-    # context "human vs human" do
-    #   it "can start and end a game" do
-    #     @io.init(RETURN, HUMAN, HUMAN, '1', '4', '2', '5', '3', QUIT)
-    #     expect(@client.start).to raise_error SystemExit
-    #   end
+      context "main menu" do
+        it "exits when 'quit' is typed in main menu" do
+          @io.init(QUIT)
+          # expect(@io.gets_count).to eq 1
+          expect(@client.start).to raise_error SystemExit
+        end
+      end
 
-    #   it "does not change player when invalid input is entered" do
-    #     @io.init(RETURN, HUMAN, HUMAN, '1', 'BAD', '4', '2', '5', '3', QUIT)
-    #     expect(@client.start).to raise_error SystemExit
-    #   end
+      context "human vs human" do
+        it "can start and end a game" do
+          @io.init('1', HUMAN, HUMAN, '1', '4', '2', '5', '3', QUIT)
+          expect(@client.start).to raise_error SystemExit
+        end
 
-    #   it "does not change player when a duplicate position is given" do
-    #     @io.init(RETURN, HUMAN, HUMAN, '1', '1', '4', '2', '5', '3', QUIT)
-    #     expect(@client.start).to raise_error SystemExit
-    #   end
-    # end
+        it "does not change player when invalid input is entered" do
+          @io.init('1', HUMAN, HUMAN, '1', 'BAD', '4', '2', '5', '3', QUIT)
+          expect(@client.start).to raise_error SystemExit
+        end
 
-    # context "computer vs computer" do
-    #   it "can play until a tie or win is achieved" do
-    #     @io.init(RETURN, EASY, EASY, QUIT)
-    #     expect(@client.start).to raise_error SystemExit
-    #   end
-    # end
+        it "does not change player when a duplicate position is given" do
+          @io.init('1', HUMAN, HUMAN, '1', '1', '4', '2', '5', '3', QUIT)
+          expect(@client.start).to raise_error SystemExit
+        end
+      end
+
+      context "computer vs computer" do
+        it "can play until a tie or win is achieved" do
+          @io.init('1', EASY, EASY, 'quit')
+          expect(@client.start).to raise_error SystemExit
+        end
+      end
+    end
   end
 end

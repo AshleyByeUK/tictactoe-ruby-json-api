@@ -2,6 +2,24 @@ module ConsoleClient
   class TextProvider
     def get_text(text, options = {})
       case text
+      when :player_one
+        "Player 1"
+      when :player_two
+        "Player 2"
+      when :title
+        welcome_text
+      when :help
+        "Type 'quit' at any time to exit TicTacToe."
+      when :main_menu
+        "1. Play a game\n2. Quit"
+      when :configure_player
+        "Choose a player type for #{get_text(options[:player])}:\n\n1. Human\n2. Easy computer"
+      when :return_to_main_menu
+        "Return to main menu? (Y/N)"
+      when :invalid_selection
+        "That option was not recognised, please try again."
+
+
       when :ready
         "Great, let's play a game of Tic Tac Toe!"
       when :ok
@@ -16,8 +34,7 @@ module ConsoleClient
         "Hmm, you can't play on top of an existing marker. Try again."
       when :game_over
         "GAME OVER! #{game_over_reason(options[:result], options[:player])}\n\n"
-      when :welcome
-        welcome_text
+
       when :player_type
         "Choose a player type for #{player_text(options[:player])}:\n\n1. Human\n2. Easy computer\n"
       when :play_a_game

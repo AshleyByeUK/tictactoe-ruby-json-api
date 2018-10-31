@@ -3,12 +3,12 @@ require 'game/human_player'
 
 module Game
   class Player
-    def self.create(name)
+    def self.create(name, token)
       case name
       when :human
-        HumanPlayer.new()
+        HumanPlayer.new(token)
       when :easy
-        EasyPlayer.new()
+        EasyPlayer.new(token)
       else
         raise RuntimeError, "Unknown player type specified"
       end

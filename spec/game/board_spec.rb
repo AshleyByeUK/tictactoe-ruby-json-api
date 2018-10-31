@@ -15,6 +15,7 @@ module Game
       it "returns a new board after placing a token" do
         updated_board = @board.place_token(1, 'X')
         expect(updated_board.object_id).not_to eq @board.object_id
+        expect(updated_board).not_to eq @board
       end
 
       it "can place a token for player 1 and player 2" do
@@ -29,31 +30,10 @@ module Game
                       .place_token(1, 'O')
         expect(board.positions).to eq ['X', *2..9]
         expect(board.available_positions).to eq [*2..9]
-        expect(board.has_error?).to be true
-        expect(board.error).to eq :position_taken
       end
 
-      # TODO: This can be deleted once below two TODO's have been completed.
-      it "does not have any errors when token placed in valid position" do
-        board = @board.place_token(1, 'X')
-        expect(board.has_error?).to be false
-        expect(board.error).to be nil
-      end
-
-      # TODO: Check that board raises RuntimeError if invalid position given.
-      # TODO: Move these two tests to the user interface.
-      [-1, 10, "a", "A", "pos", "£", " ", "", nil].each do |position|
-        it "does not allow tokens to be placed in invalid position: #{position}" do
-          board = @board.place_token(position, 'X')
-          expect(board.has_error?).to be true
-          expect(board.error).to eq :invalid_position
-        end
-      end
-
-      it "can place a valid integer passed as a string" do
-        board = @board.place_token("1", 'X')
-        expect(board.has_error?).to be false
-        expect(board.error).to be nil
+      it "is equal to another board when all positions are the same" do
+        expect(@board).to eq Board.new()
       end
     end
   end

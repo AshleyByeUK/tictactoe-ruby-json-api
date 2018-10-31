@@ -2,53 +2,59 @@ require 'game/game'
 require 'console_client/text_provider'
 
 module ConsoleClient
+  Input = Struct.new(:state, :value)
+
   class ConsoleClient
-    def initialize
+    def initialize(io = Kernel)
+      @io = io
       @text_provider = TextProvider.new
     end
 
     def start
-      system "clear"
-      puts @text_provider.get_text(:welcome)
+      @io.system('clear')
+      @io.puts @text_provider.get_text(:welcome)
       main_ui_loop
       :finished
     end
 
-    def get_input(valid_input = [], error_message = "Error", prompt = '> ')
-      quit_commands = ['q', 'quit', 'exit']
-      input = gets.strip.downcase
-      until input_valid?(input, valid_input, quit_commands)
-        puts(error_message)
-        print(prompt)
-        input = gets.strip.downcase
+    def get_input(valid_input, exit_command = 'quit')
+      input = @io.gets.strip.downcase
+      if valid_input.map { |v| v.to_s }.include?(input)
+        Input.new(:valid_input, input)
+      elsif exit_command == input
+        Input.new(:valid_input, :exit)
+      else
+        Input.new(:invalid_input, nil)
       end
-      quit_commands.include?(input) ? :exit : input
     end
 
     private
 
     def main_ui_loop
       loop do
-        puts "\n#{@text_provider.get_text(:play_a_game)}"
-        case get_input()
+        @io.puts "\n#{@text_provider.get_text(:play_a_game)}"
+        begin
+          input = get_input([])
+        end until input.state == :valid_input
+        case input.value
         when :exit
-          puts "\n#{@text_provider.get_text(:quit)}"
+          @io.puts "\n#{@text_provider.get_text(:quit)}"
           break
         else
           options = configure_game
           play_game(options)
         end
-        system "clear"
+        @io.system "clear"
       end
     end
 
     def configure_game
       options = {}
       [:player_one, :player_two].each do |player|
-        system "clear"
-        puts "#{@text_provider.get_text(:player_type, {player: player})}\n"
+        @io.system "clear"
+        @io.puts "#{@text_provider.get_text(:player_type, {player: player})}\n"
         print "> "
-        input = get_input([1, 2], 'Invalid option, please try again.')
+        input = get_input([1, 2])
         options[player] = player_type(input.to_i)
       end
       options
@@ -72,12 +78,12 @@ module ConsoleClient
         game = game.make_move(game.current_player, move)
       end
       update_ui(game)
-      get_input([], '', '')
+      get_input([])
       :finished
     end
 
     def update_ui(game)
-      system "clear"
+      @io.system "clear"
       print_game_state(game) if game.state == :ready
       print_board(game)
       print_game_state(game) unless game.state == :ready
@@ -86,12 +92,12 @@ module ConsoleClient
     end
 
     def print_game_state(game)
-      puts "\n#{@text_provider.get_text(game.state, {result: game.result, player: game.current_player})}"
+      @io.puts "\n#{@text_provider.get_text(game.state, {result: game.result, player: game.current_player})}"
     end
 
     def print_board(game)
       board = game.board_state
-      puts ""
+      @io.puts ""
       draw_row(board[0], board[1], board[2])
       draw_spacer_row
       draw_row(board[3], board[4], board[5])
@@ -100,7 +106,7 @@ module ConsoleClient
     end
 
     def draw_row(a, b, c)
-      puts " #{marker_for(a)} | #{marker_for(b)} | #{marker_for(c)} "
+      @io.puts " #{marker_for(a)} | #{marker_for(b)} | #{marker_for(c)} "
     end
 
     def marker_for(id)
@@ -115,7 +121,7 @@ module ConsoleClient
     end
 
     def draw_spacer_row
-      puts '-----------'
+      @io.puts '-----------'
     end
 
     def print_available_positions(game)
@@ -129,7 +135,7 @@ module ConsoleClient
     end
 
     def get_next_move(game)
-      get_input(game.available_positions, "Invalid position, please try again.")
+      get_input(game.available_positions)
     end
 
     def input_valid?(input, valid_input, quit_commands)

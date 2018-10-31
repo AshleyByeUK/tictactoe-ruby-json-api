@@ -1,8 +1,6 @@
 module Game
   class Board
     EMPTY_BOARD = (1..9).to_a
-    PLAYER_ONE = 'X'
-    PLAYER_TWO = 'O'
 
     attr_reader :error, :positions
 
@@ -15,8 +13,8 @@ module Game
       @positions.select { |pos| pos.is_a?(Integer) }
     end
 
-    def place_token(position, player)
-      position_valid?(position) ? apply_token(position, player) : apply_errors(position)
+    def place_token(position, token)
+      position_valid?(position) ? apply_token(position, token) : apply_errors(position)
     end
 
     def has_error?
@@ -41,9 +39,9 @@ module Game
       position.to_i < 1 || position.to_i > @positions.length
     end
 
-    def apply_token(position, player)
+    def apply_token(position, token)
       positions = Array.new(@positions)
-      positions[position.to_i - 1] = player
+      positions[position.to_i - 1] = token
       Board.new(positions)
     end
 

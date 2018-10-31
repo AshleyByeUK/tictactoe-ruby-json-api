@@ -61,7 +61,7 @@ module Game
     end
 
     def board_representation_for_player(player)
-      player == :player_one ? Board::PLAYER_ONE : Board::PLAYER_TWO
+      player == :player_one ? 'X' : 'O'
     end
 
     def current_game_state

@@ -16,7 +16,7 @@ module Game
     it "allows tokens to be placed on a board" do
       game = @game.make_move(:player_one, 1)
       expect(game.state).to eq :ok
-      expect(game.board_state).to eq [Board::PLAYER_ONE].concat([*2..9])
+      expect(game.board_state).to eq ['X', *2..9]
       expect(game.available_positions).to eq [*2..9]
     end
 
@@ -24,7 +24,7 @@ module Game
       game = @game.make_move(:player_one, 1)
       game = game.make_move(:player_two, 1)
       expect(game.state).to eq :position_taken
-      expect(game.board_state).to eq [Board::PLAYER_ONE].concat([*2..9])
+      expect(game.board_state).to eq ['X', *2..9]
       expect(game.available_positions).to eq [*2..9]
     end
 
@@ -49,7 +49,7 @@ module Game
     it "correctly places player twos token on the board" do
       game = @game.make_move(:player_one, 1)
       game = game.make_move(:player_two, 2)
-      expect(game.board_state).to eq [Board::PLAYER_ONE, Board::PLAYER_TWO].concat([*3..9])
+      expect(game.board_state).to eq ['X', 'O', *3..9]
       expect(game.available_positions).to eq [*3..9]
     end
 

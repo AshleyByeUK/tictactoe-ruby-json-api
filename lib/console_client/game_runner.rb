@@ -24,9 +24,12 @@ module ConsoleClient
 
     def play_turn(game)
       prompt = "#{@text_provider.get_text(game.current_player)} "
-      input = game.current_player_type == :user ? @io.get_input(game.available_positions, @text_provider.get_text(:bad_position), prompt) : nil
-      game.end_game if input == :exit
-      game.make_move(game.current_player, input.to_i) unless input == :exit
+      input = game.current_player_user? ? @io.get_input(game.available_positions, @text_provider.get_text(:bad_position), prompt) : nil
+      if @io.exit?
+        game.end_game
+      else
+        game.make_move(game.current_player, input.to_i)
+      end
     end
 
     def display_board(board)

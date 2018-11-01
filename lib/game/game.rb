@@ -30,8 +30,8 @@ module Game
       @board.positions
     end
 
-    def current_player_type
-      @players[@current_player - 1].type
+    def current_player_user?
+      @players[@current_player - 1].type == :user
     end
 
     def available_positions

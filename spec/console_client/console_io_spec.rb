@@ -42,8 +42,8 @@ module ConsoleClient
         it "accepts '#{command}' as a valid quit command'" do
           io = ConsoleIO.new(device: StringIO.new(command))
           input = io.get_input_from_user([])
-          expect(input.state).to be :valid_input
-          expect(input.value).to eq :exit
+          expect(input.state).to be :invalid_input
+          expect(input.value).to be_nil
         end
       end
     end

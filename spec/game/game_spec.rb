@@ -135,12 +135,12 @@ module Game
       end
 
       it "when the current player is a user it passes the user player type" do
-        expect(@game.current_player_type).to be :user
+        expect(@game.current_player_user?).to be true
       end
 
       it "when the current player is a computer it passes the computer player type" do
         game = @game.make_move(1, 1)
-        expect(game.current_player_type).to be :computer
+        expect(game.current_player_user?).to be false
       end
     end
   end

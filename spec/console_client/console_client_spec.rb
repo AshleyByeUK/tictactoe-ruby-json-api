@@ -14,28 +14,40 @@ module ConsoleClient
       @client = ConsoleClient.new(@io)
     end
 
-    context "tests which call 'exit'" do
-      context "menu system" do
-        it "exits when 'quit' is typed in main menu" do
-          @io.init(QUIT)
-          @client.start
-          expect(@io.gets_count).to eq 1
-          expect(@io.exit_called).to be true
-        end
+    context "menu system" do
+      it "exits when 'quit' is typed in main menu" do
+        @io.init(QUIT)
+        @client.start
+        expect(@io.gets_count).to eq 1
+        expect(@io.exit_called).to be true
+      end
 
-        it "quits using the quit menu option of the main menu" do
-          @io.init('2')
-          @client.start
-          expect(@io.gets_count).to eq 1
-          expect(@io.exit_called).to be true
-        end
+      it "exits when quit option is specified in main menu" do
+        @io.init('2')
+        @client.start
+        expect(@io.gets_count).to eq 1
+        expect(@io.exit_called).to be true
+      end
 
-        it "quits when choosing not to return to the main menu after a game completes" do
-          @io.init('1', EASY, EASY, 'n')
-          @client.start
-          expect(@io.gets_count).to eq 4
-          expect(@io.exit_called).to be true
-        end
+      it "quits when 'quit' is typed in player configuration menu" do
+        @io.init('1', QUIT)
+        @client.start
+        expect(@io.gets_count).to eq 2
+        expect(@io.exit_called).to be true
+      end
+
+      it "quits when choosing not to return to the main menu after a game completes" do
+        @io.init('1', EASY, EASY, 'n')
+        @client.start
+        expect(@io.gets_count).to eq 4
+        expect(@io.exit_called).to be true
+      end
+
+      it "quits when typing 'quit' in the game play menu" do
+        @io.init('1', HUMAN, HUMAN, QUIT)
+        @client.start
+        expect(@io.gets_count).to eq 4
+        expect(@io.exit_called).to be true
       end
 
       context "human vs human" do

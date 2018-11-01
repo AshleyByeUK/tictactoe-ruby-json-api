@@ -1,10 +1,10 @@
 module Game
-  class EasyStrategy
-    attr_reader :name, :type
+  class EasyPlayer
+    attr_reader :type, :token
 
-    def initialize()
-      @name = :easy
+    def initialize(token)
       @type = :computer
+      @token = token
     end
 
     def compute_move(board, position = nil)

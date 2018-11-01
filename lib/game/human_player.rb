@@ -1,10 +1,10 @@
 module Game
-  class HumanStrategy
-    attr_reader :name, :type
+  class HumanPlayer
+    attr_reader :type, :token
 
-    def initialize()
-      @name = :human
+    def initialize(token)
       @type = :user
+      @token = token
     end
 
     def compute_move(board, position)

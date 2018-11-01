@@ -43,7 +43,7 @@ module ConsoleClient
       end
     end
 
-    context "test which call 'exit'" do
+    context "tests which call 'exit'" do
       around(:each) do |test|
         begin
           test.run
@@ -51,10 +51,21 @@ module ConsoleClient
         end
       end
 
-      context "main menu" do
+      context "menu system" do
         it "exits when 'quit' is typed in main menu" do
           @io.init(QUIT)
           # expect(@io.gets_count).to eq 1
+          # expect(@client.io.object_id).to eq @io.object_id
+          expect(@client.start).to raise_error SystemExit
+        end
+
+        it "quits using the quit menu option of the main menu" do
+          @io.init('2')
+          expect(@client.start).to raise_error SystemExit
+        end
+
+        it "quits when choosing not to return to the main menu after a game completes" do
+          @io.init('1', EASY, EASY, 'n')
           expect(@client.start).to raise_error SystemExit
         end
       end
@@ -78,7 +89,7 @@ module ConsoleClient
 
       context "computer vs computer" do
         it "can play until a tie or win is achieved" do
-          @io.init('1', EASY, EASY, 'quit')
+          @io.init('1', EASY, EASY, QUIT)
           expect(@client.start).to raise_error SystemExit
         end
       end

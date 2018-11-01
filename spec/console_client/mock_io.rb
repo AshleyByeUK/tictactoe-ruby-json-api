@@ -13,6 +13,7 @@ module ConsoleClient
     def gets(*args)
       @io = StringIO.new(@inputs[@gets_count].to_s)
       @gets_count += 1
+      # Kernel.puts "Gets called : #{@gets_count}"
       @io.gets
     end
 

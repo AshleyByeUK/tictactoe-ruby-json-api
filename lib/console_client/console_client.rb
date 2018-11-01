@@ -14,7 +14,6 @@ module ConsoleClient
       loop do
         display_main_menu
       end
-      :finished
     end
 
     def get_input(valid_input, exit_command = 'quit')

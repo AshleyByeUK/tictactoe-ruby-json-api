@@ -1,9 +1,8 @@
 module Game
   class HumanPlayer
-    attr_reader :name, :type, :token
+    attr_reader :type, :token
 
     def initialize(token)
-      @name = :human
       @type = :user
       @token = token
     end

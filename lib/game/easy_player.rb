@@ -1,9 +1,8 @@
 module Game
   class EasyPlayer
-    attr_reader :name, :type, :token
+    attr_reader :type, :token
 
     def initialize(token)
-      @name = :easy
       @type = :computer
       @token = token
     end

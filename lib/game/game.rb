@@ -30,12 +30,24 @@ module Game
       @board.positions
     end
 
+    def current_player_type
+      @players[@current_player - 1].type
+    end
+
     def available_positions
       @board.available_positions
     end
 
     def result
       @rules.game_result(@board)
+    end
+
+    def end_game
+      Game.new(@players, @current_player, @board, :game_over)
+    end
+
+    def game_over?
+      @state == :game_over || result != :playing ? true : false
     end
 
     private

@@ -4,13 +4,11 @@ module Game
   describe Player do
     it "creates a human player" do
       player = Player.create(:human, 'X')
-      expect(player.name).to eq :human
       expect(player.type).to eq :user
     end
 
     it "creates an easy computer player" do
       player = Player.create(:easy, 'X')
-      expect(player.name).to eq :easy
       expect(player.type).to eq :computer
     end
 

@@ -1,36 +1,33 @@
-require 'stringio'
+require 'console_client/console_io'
 
 module ConsoleClient
-  class MockIO
+  class MockIO < ConsoleIO
     attr_reader :exit_called, :gets_count
 
+    def initialize
+      super(device: StringIO.new)
+    end
+
     def init(*inputs)
-      @inputs = inputs.flatten
-      @io = StringIO.new
+      @device.puts(inputs.flatten)
+      @device.rewind
       @gets_count = 0
       @exit_called = false
     end
 
-    def gets(*args)
-      @io = StringIO.new(@inputs[@gets_count].to_s)
+    def get_input(valid_input, error_message = '', prompt = '')
       @gets_count += 1
-      @io.gets
+      super(valid_input, error_message, prompt)
     end
 
-    def puts(*args)
-      @io.puts
+    def display(text, new_line = "\n")
     end
 
-    def print(*args)
-      @io.puts
+    def clear_screen
     end
 
-    def system(*args)
-    end
-
-    def exit(*args)
+    def exit
       @exit_called = true
-      Kernel.exit
     end
   end
 end

@@ -82,6 +82,7 @@ module Game
                   .make_move(1, 8)
       expect(game.state).to eq :ok
       expect(game.result).to eq :tie
+      expect(game.game_over?).to be true
     end
 
     it "returns the status and result of a won game" do
@@ -94,6 +95,21 @@ module Game
                   .make_move(1, 7)
       expect(game.state).to eq :ok
       expect(game.result).to eq :win
+      expect(game.game_over?).to be true
+    end
+
+    it "can be ended early" do
+      game = @game.make_move(1, 1)
+                  .make_move(2, 2)
+                  .end_game()
+      expect(game.game_over?).to be true
+      expect(game.result).to be :playing
+    end
+
+    it "is not over midway through a game" do
+      game = @game.make_move(1, 1)
+      expect(game.game_over?).to be false
+      expect(game.result).to be :playing
     end
 
     context "player 1 human player vs player 2 computer player" do
@@ -116,6 +132,15 @@ module Game
         game = @game.make_move(1, 1)
         game = game.make_move(2)
         expect(@game.current_player).to be 1
+      end
+
+      it "when the current player is a user it passes the user player type" do
+        expect(@game.current_player_type).to be :user
+      end
+
+      it "when the current player is a computer it passes the computer player type" do
+        game = @game.make_move(1, 1)
+        expect(game.current_player_type).to be :computer
       end
     end
   end

@@ -5,6 +5,7 @@ module ConsoleClient
   Input = Struct.new(:state, :value)
 
   class ConsoleClient
+    attr_reader :io
     def initialize(io = Kernel)
       @io = io
       @text_provider = TextProvider.new
@@ -52,7 +53,7 @@ module ConsoleClient
 
     def quit
       @io.puts(@text_provider.get_text(:quit))
-      exit
+      @io.exit
     end
 
     def display_main_menu

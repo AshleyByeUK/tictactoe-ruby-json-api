@@ -54,43 +54,55 @@ module ConsoleClient
       context "menu system" do
         it "exits when 'quit' is typed in main menu" do
           @io.init(QUIT)
-          # expect(@io.gets_count).to eq 1
-          # expect(@client.io.object_id).to eq @io.object_id
-          expect(@client.start).to raise_error SystemExit
+          @client.start
+          expect(@io.gets_count).to eq 1
+          expect(@io.exit_called).to be_true
         end
 
         it "quits using the quit menu option of the main menu" do
           @io.init('2')
-          expect(@client.start).to raise_error SystemExit
+          @client.start
+          expect(@io.gets_count).to eq 1
+          expect(@io.exit_called).to be_true
         end
 
         it "quits when choosing not to return to the main menu after a game completes" do
           @io.init('1', EASY, EASY, 'n')
-          expect(@client.start).to raise_error SystemExit
+          @client.start
+          expect(@io.gets_count).to eq 4
+          expect(@io.exit_called).to be_true
         end
       end
 
       context "human vs human" do
         it "can start and end a game" do
           @io.init('1', HUMAN, HUMAN, '1', '4', '2', '5', '3', QUIT)
-          expect(@client.start).to raise_error SystemExit
+          @client.start
+          expect(@io.gets_count).to eq 9
+          expect(@io.exit_called).to be_true
         end
 
         it "does not change player when invalid input is entered" do
           @io.init('1', HUMAN, HUMAN, '1', 'BAD', '4', '2', '5', '3', QUIT)
-          expect(@client.start).to raise_error SystemExit
+          @client.start
+          expect(@io.gets_count).to eq 10
+          expect(@io.exit_called).to be_true
         end
 
         it "does not change player when a duplicate position is given" do
           @io.init('1', HUMAN, HUMAN, '1', '1', '4', '2', '5', '3', QUIT)
-          expect(@client.start).to raise_error SystemExit
+          @client.start
+          expect(@io.gets_count).to eq 10
+          expect(@io.exit_called).to be_true
         end
       end
 
       context "computer vs computer" do
         it "can play until a tie or win is achieved" do
           @io.init('1', EASY, EASY, QUIT)
-          expect(@client.start).to raise_error SystemExit
+          @client.start
+          expect(@io.gets_count).to eq 4
+          expect(@io.exit_called).to be_true
         end
       end
     end

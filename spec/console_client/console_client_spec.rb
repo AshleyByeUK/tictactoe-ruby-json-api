@@ -5,6 +5,7 @@ require 'game/game'
 module ConsoleClient
   HUMAN = '1'
   EASY = '2'
+  HARD = '3'
   QUIT = 'quit'
   RETURN = "\n"
 
@@ -74,8 +75,15 @@ module ConsoleClient
       end
 
       context "computer vs computer" do
-        it "can play until a tie or win is achieved" do
+        it "can play at same until a tie or win is achieved" do
           @io.init('1', EASY, EASY, QUIT)
+          @client.start
+          expect(@io.gets_count).to eq 4
+          expect(@io.exit_called).to be true
+        end
+
+        it "can play at different difficulties until a tie or win is achieved" do
+          @io.init('1', EASY, HARD, QUIT)
           @client.start
           expect(@io.gets_count).to eq 4
           expect(@io.exit_called).to be true

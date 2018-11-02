@@ -14,7 +14,7 @@ module Game
 
     def place_token(position, token)
       positions = Array.new(@positions)
-      positions[position.to_i - 1] = token if available_positions.include?(position)
+      positions[position - 1] = token if available_positions.include?(position)
       Board.new(positions)
     end
 

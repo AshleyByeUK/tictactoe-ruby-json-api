@@ -16,7 +16,7 @@ module ConsoleClient
       if game.result == :win || game.result == :tie
         @io.clear_screen
         display_board(game.current_board)
-        display_final_result(game.result, game.current_player)
+        display_final_result(game.result, game.last_player)
       end
     end
 
@@ -28,7 +28,7 @@ module ConsoleClient
       if @io.exit?
         game.end_game
       else
-        game.make_move(game.current_player, input.to_i)
+        game.make_move(game.current_player, input)
       end
     end
 

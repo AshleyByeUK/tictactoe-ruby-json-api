@@ -46,10 +46,12 @@ module ConsoleClient
     def configure_player(player, token)
       @io.clear_screen
       @io.display(@text_provider.get_text(:configure_player, {player: player}))
-      case @io.get_input(['1', '2'], @text_provider.get_text(:invalid_selection))
+      case @io.get_input(['1', '2', '3'], @text_provider.get_text(:invalid_selection))
       when '1'
         Game::Player.create(:human, token)
       when '2'
+        Game::Player.create(:easy, token)
+      when '3'
         Game::Player.create(:easy, token)
       end
     end

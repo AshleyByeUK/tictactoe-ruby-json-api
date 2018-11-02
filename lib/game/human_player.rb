@@ -7,8 +7,7 @@ module Game
       @token = token
     end
 
-    def compute_move(board, position)
-      position
+    def compute_move(game)
     end
   end
 end

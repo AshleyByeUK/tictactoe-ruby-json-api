@@ -6,7 +6,7 @@ module Game
   class Game
     attr_reader :current_player, :state, :players
 
-    def initialize(players, current_player = 1, board = Board.new(), state = :ready)
+    def initialize(players, current_player: 1, board: Board.new(), state: :ready)
       @players = players
       @current_player = current_player
       @board = board
@@ -17,12 +17,12 @@ module Game
     def make_move(player, position = nil)
       raise RuntimeError, 'Invalid player specified' if invalid_player?(player)
 
-      position = @players[player - 1].compute_move(@board, position)
-      updated_board = @board.place_token(position, @players[player - 1].token)
+      position = @players[player - 1].compute_move(self) if position == nil
+      updated_board = @board.place_token(position.to_i, @players[player - 1].token)
       if updated_board != @board
-        Game.new(@players, swap_current_player, updated_board, :ok)
+        Game.new(@players, current_player: swap_current_player, board: updated_board, state: :ok)
       else
-        Game.new(@players, @current_player, updated_board, :bad_position)
+        Game.new(@players, current_player: @current_player, board: updated_board, state: :bad_position)
       end
     end
 
@@ -43,11 +43,15 @@ module Game
     end
 
     def end_game
-      Game.new(@players, @current_player, @board, :game_over)
+      Game.new(@players, current_player: @current_player, board: @board, state: :game_over)
     end
 
     def game_over?
       @state == :game_over || result != :playing ? true : false
+    end
+
+    def last_player
+      swap_current_player
     end
 
     private

@@ -7,8 +7,8 @@ module Game
       @token = token
     end
 
-    def compute_move(board, position = nil)
-      board.available_positions.sample
+    def compute_move(game, position = nil)
+      game.available_positions.sample
     end
   end
 end

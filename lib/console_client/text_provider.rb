@@ -13,7 +13,7 @@ module ConsoleClient
       when :main_menu
         "1. Play a game.\n2. Quit."
       when :configure_player
-        "Choose a player type for #{get_text(options[:player])}:\n\n1. Human.\n2. Easy computer."
+        "Choose a player type for #{get_text(options[:player])}:\n\n1. Human.\n2. Easy computer.\n3. Hard computer."
       when :return_to_main_menu
         "Return to main menu? (Y/N)"
       when :invalid_selection

@@ -57,7 +57,7 @@ module ConsoleClient
       when '2'
         Game::Player.create(:easy, token, self)
       when '3'
-        Game::Player.create(:easy, token, self)
+        Game::Player.create(:hard, token, self)
       end
     end
 

@@ -12,7 +12,7 @@ module Game
       expect(player.type).to eq :computer
     end
 
-    it "creates an easy computer player" do
+    it "creates a hard computer player" do
       player = Player.create(:hard, 'X')
       expect(player.type).to eq :computer
     end

@@ -18,32 +18,32 @@ module Game
       it "chooses the tie position when only one position remains" do
         board = Board.new(['X', 'X', 'O', 'O', 'O', 6, 'X', 'O', 'X'])
         game = Game.new(@players, board: board)
-        expect(game.make_move(1).result).to eq :tie
+        expect(game.make_move().tie?).to eq true
       end
 
       it "chooses the win position when only one position remains" do
         board = Board.new(['X', 'X', 'O', 'X', 'X', 'O', 'O', 'O', 9])
         game = Game.new(@players, board: board)
-        expect(game.make_move(1).result).to eq :win
+        expect(game.make_move().win?).to be true
       end
 
       it "blocks the opponent from winning" do
         board = Board.new([1, 'X', 'O', 'X', 'O', 6, 7, 8, 9])
         game = Game.new(@players, board: board)
-        expect(game.make_move(1).result).to eq :playing
+        expect(game.make_move().game_over?).to be false
       end
 
       it "plays for a winning move" do
         board = Board.new(['X', 2, 'X', 'O', 'O', 6, 7, 'X', 'O'])
         game = Game.new(@players, board: board)
-        expect(game.make_move(1).result).to eq :win
+        expect(game.make_move().win?).to be true
       end
 
       it "plays for a forking move" do
         board = Board.new([1, 'X', 3, 4, 5, 'O', 7, 'O', 'X'])
         game = Game.new(@players, board: board, current_player: 1)
-        game = game.make_move(1)
-        expect(game.result).to eq :playing
+        game = game.make_move()
+        expect(game.game_over?).to be false
         expect(game.available_positions.include?(1)).to be false
       end
     end

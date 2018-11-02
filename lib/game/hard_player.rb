@@ -20,7 +20,7 @@ module Game
       positions = []
 
       game.available_positions.each do |position|
-        g = game.make_move(game.current_player, position)
+        g = game.place_token(game.current_player, position)
         scores << minimax(g)
         positions << position
       end
@@ -37,9 +37,9 @@ module Game
     end
 
     def score(game)
-      if game.result == :win && game.last_player == @me
+      if game.win? && game.last_player == @me
         100
-      elsif game.result == :win && game.last_player != @me
+      elsif game.win? && game.last_player != @me
         -100
       else
         0

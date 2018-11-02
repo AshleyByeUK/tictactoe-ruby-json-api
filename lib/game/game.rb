@@ -14,15 +14,21 @@ module Game
       @rules = GameRules.new()
     end
 
-    def make_move(player, position = nil)
+    def make_move
+      player = @players[@current_player - 1]
+      position = player.compute_move(self)
+      place_token(@current_player, position)
+    end
+
+    def place_token(player, position)
       raise RuntimeError, 'Invalid player specified' if invalid_player?(player)
 
-      position = @players[player - 1].compute_move(self) if position == nil
-      updated_board = @board.place_token(position.to_i, @players[player - 1].token)
-      if updated_board != @board
-        Game.new(@players, current_player: swap_current_player, board: updated_board, state: :ok)
+      board = @board.place_token(position, @players[player - 1].token)
+      if board != @board
+        state = @rules.game_result(board) == :playing ? :ok : :game_over
+        Game.new(@players, current_player: swap_current_player, board: board, state: state)
       else
-        Game.new(@players, current_player: @current_player, board: updated_board, state: :bad_position)
+        Game.new(@players, current_player: @current_player, board: board, state: :bad_position)
       end
     end
 
@@ -38,16 +44,24 @@ module Game
       @board.available_positions
     end
 
-    def result
-      @rules.game_result(@board)
+    def game_over?
+      game_ended? || win? || tie?
+    end
+
+    def win?
+      @rules.game_result(@board) == :win
+    end
+
+    def tie?
+      @rules.game_result(@board) == :tie
+    end
+
+    def game_ended?
+      @state == :ended
     end
 
     def end_game
-      Game.new(@players, current_player: @current_player, board: @board, state: :game_over)
-    end
-
-    def game_over?
-      @state == :game_over || result != :playing ? true : false
+      Game.new(@players, current_player: @current_player, board: @board, state: :ended)
     end
 
     def last_player

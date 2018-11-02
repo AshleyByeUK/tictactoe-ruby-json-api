@@ -1,5 +1,7 @@
 module ConsoleClient
   class ConsoleIO
+    attr_reader :exit_command
+
     Input = Struct.new(:state, :value)
 
     def initialize(exit_command: 'quit', device: Kernel)
@@ -34,7 +36,7 @@ module ConsoleClient
         input = get_input_from_user(valid_input)
         display(error_message) if input.state == :invalid_input && !exit?
       end until input.state == :valid_input || exit?
-      input.value
+      exit? ? @exit_command : input.value
     end
 
     def get_input_from_user(valid_input)

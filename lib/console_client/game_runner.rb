@@ -7,28 +7,29 @@ module ConsoleClient
 
     def play_game(player_one, player_two)
       game = Game::Game.new([player_one, player_two])
+      @io.clear_screen
+      display_board(game.current_board)
       while !game.game_over?
-        @io.clear_screen
-        display_board(game.current_board)
-        display_game_state(game.state)
         game = play_turn(game)
-      end
-      if game.result == :win || game.result == :tie
-        @io.clear_screen
-        display_board(game.current_board)
-        display_final_result(game.result, game.current_player)
+        update_display(game)
       end
     end
 
     private
 
     def play_turn(game)
-      prompt = "#{@text_provider.get_text(game.current_player)} "
-      input = game.current_player_user? ? @io.get_input(game.available_positions, @text_provider.get_text(:bad_position), prompt) : nil
       if @io.exit?
         game.end_game
       else
-        game.make_move(game.current_player, input.to_i)
+        game.make_move
+      end
+    end
+
+    def update_display(game)
+      if !game.game_ended? && !@io.exit?
+        @io.clear_screen
+        display_board(game.current_board)
+        display_game_state(game)
       end
     end
 
@@ -49,13 +50,15 @@ module ConsoleClient
       @io.display('-----------')
     end
 
-    def display_game_state(state)
-      @io.display("\n#{@text_provider.get_text(state)}")
-    end
-
-    def display_final_result(result, player)
-      options = {player: player}
-      @io.display("#{@text_provider.get_text(result, options)}")
+    def display_game_state(game)
+      options = {player: game.last_player}
+      if game.win?
+        @io.display("#{@text_provider.get_text(:win, options)}")
+      elsif game.tie?
+        @io.display("#{@text_provider.get_text(:tie)}")
+      else
+        @io.display("#{@text_provider.get_text(:ok)}")
+      end
     end
   end
 end

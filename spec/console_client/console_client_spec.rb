@@ -5,6 +5,7 @@ require 'game/game'
 module ConsoleClient
   HUMAN = '1'
   EASY = '2'
+  HARD = '3'
   QUIT = 'quit'
   RETURN = "\n"
 
@@ -71,11 +72,22 @@ module ConsoleClient
           expect(@io.gets_count).to eq 9 # Can't explicitly test for '4' with Mock due to get_input's loop.
           expect(@io.exit_called).to be true
         end
+
+        it "can play all the way to a tie" do
+          @io.init('1', HUMAN, HUMAN, '5', '9', '7', '3', '6', '4', '8', '2', '1', 'n')
+        end
       end
 
       context "computer vs computer" do
-        it "can play until a tie or win is achieved" do
+        it "can play at same until a tie or win is achieved" do
           @io.init('1', EASY, EASY, QUIT)
+          @client.start
+          expect(@io.gets_count).to eq 4
+          expect(@io.exit_called).to be true
+        end
+
+        it "can play at different difficulties until a tie or win is achieved" do
+          @io.init('1', EASY, HARD, QUIT)
           @client.start
           expect(@io.gets_count).to eq 4
           expect(@io.exit_called).to be true

@@ -18,6 +18,11 @@ module ConsoleClient
       @io.exit
     end
 
+    def get_move(game)
+      prompt = "#{@text_provider.get_text(game.current_player)} "
+      @io.get_input(game.available_positions, @text_provider.get_text(:bad_position), prompt)
+    end
+
     private
 
     def display_main_menu
@@ -46,11 +51,13 @@ module ConsoleClient
     def configure_player(player, token)
       @io.clear_screen
       @io.display(@text_provider.get_text(:configure_player, {player: player}))
-      case @io.get_input(['1', '2'], @text_provider.get_text(:invalid_selection))
+      case @io.get_input(['1', '2', '3'], @text_provider.get_text(:invalid_selection))
       when '1'
-        Game::Player.create(:human, token)
+        Game::Player.create(:human, token, self)
       when '2'
-        Game::Player.create(:easy, token)
+        Game::Player.create(:easy, token, self)
+      when '3'
+        Game::Player.create(:hard, token, self)
       end
     end
 

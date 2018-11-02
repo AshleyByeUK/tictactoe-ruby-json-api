@@ -72,6 +72,10 @@ module ConsoleClient
           expect(@io.gets_count).to eq 9 # Can't explicitly test for '4' with Mock due to get_input's loop.
           expect(@io.exit_called).to be true
         end
+
+        it "can play all the way to a tie" do
+          @io.init('1', HUMAN, HUMAN, '5', '9', '7', '3', '6', '4', '8', '2', '1', 'n')
+        end
       end
 
       context "computer vs computer" do

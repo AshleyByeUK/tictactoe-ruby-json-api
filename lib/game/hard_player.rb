@@ -7,7 +7,7 @@ module Game
       @token = token
     end
 
-    def compute_move(game, ui = nil)
+    def make_move(game, ui = nil)
       @me = game.current_player
       minimax(game)
       @position

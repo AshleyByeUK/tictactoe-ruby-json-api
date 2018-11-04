@@ -7,7 +7,7 @@ module Game
       @token = token
     end
 
-    def compute_move(game, ui)
+    def make_move(game, ui)
       ui.listen_for_user_input(game).to_i
     end
   end

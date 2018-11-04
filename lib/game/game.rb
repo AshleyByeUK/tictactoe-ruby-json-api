@@ -15,7 +15,7 @@ module Game
 
     def make_move(ui = nil)
       player = @players[@current_player - 1]
-      position = player.compute_move(self, ui)
+      position = player.make_move(self, ui)
       place_token(@current_player, position)
     end
 

@@ -7,7 +7,7 @@ module Game
       @moves = moves.flatten
     end
 
-    def compute_move(game, ui)
+    def make_move(game, ui)
       ui.listen_for_user_input(game)
       @moves.pop
     end

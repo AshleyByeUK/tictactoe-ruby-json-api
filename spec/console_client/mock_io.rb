@@ -1,23 +1,25 @@
-require 'console_client/console_io'
-
 module ConsoleClient
-  class MockIO < ConsoleIO
+  class MockIO
     attr_reader :exit_called, :gets_count
 
-    def initialize
-      super(device: StringIO.new)
+    def initialize(exit_command)
+      @exit_command = exit_command
+      @device = StringIO.new
     end
 
     def init(*inputs)
       @device.puts(inputs.flatten)
       @device.rewind
       @gets_count = 0
+      @exit = false
       @exit_called = false
     end
 
     def get_input(valid_input, error_message = '', prompt = '')
       @gets_count += 1
-      super(valid_input, error_message, prompt)
+      input = @device.gets.strip.downcase
+      @exit = true if input == @exit_command
+      input
     end
 
     def display(text, new_line = "\n")
@@ -28,6 +30,14 @@ module ConsoleClient
 
     def exit
       @exit_called = true
+    end
+
+    def exit?
+      @exit
+    end
+
+    def exit=(exit)
+      @exit = exit
     end
   end
 end

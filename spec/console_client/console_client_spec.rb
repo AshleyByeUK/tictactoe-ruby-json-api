@@ -13,7 +13,7 @@ module ConsoleClient
 
   describe ConsoleClient do
     before(:each) do
-      @io = MockIO.new
+      @io = MockIO.new(QUIT)
       text_provider = TextProvider
       ui = MockGameUI.new
       @client = ConsoleClient.new(@io, text_provider, ui)

@@ -44,6 +44,7 @@ module ConsoleClient
           input = io.get_input_from_user([])
           expect(input.state).to be :invalid_input
           expect(input.value).to be_nil
+          expect(io.exit?).to be true
         end
       end
     end

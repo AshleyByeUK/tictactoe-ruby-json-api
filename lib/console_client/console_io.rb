@@ -26,10 +26,6 @@ module ConsoleClient
       @exit
     end
 
-    def exit=(exit)
-      @exit = exit
-    end
-
     def get_input(valid_input, error_message = '', prompt = '')
       begin
         display_prompt(prompt)
@@ -53,6 +49,10 @@ module ConsoleClient
 
     def display_prompt(prompt = '')
       display("#{prompt}> ", '')
+    end
+
+    def exit=(exit)
+      @exit = exit
     end
   end
 end

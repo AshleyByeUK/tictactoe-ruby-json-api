@@ -35,10 +35,6 @@ module Game
       @board.positions
     end
 
-    def current_player_user?
-      @players[@current_player - 1].type == :user
-    end
-
     def available_positions
       @board.available_positions
     end
@@ -65,6 +61,14 @@ module Game
 
     def last_player
       swap_current_player
+    end
+
+    def current_player_name
+      @players[@current_player - 1].name
+    end
+
+    def last_player_name
+      @players[swap_current_player - 1].name
     end
 
     private

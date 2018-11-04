@@ -1,10 +1,10 @@
 module Game
   class HardPlayer
-    attr_reader :type, :token
+    attr_reader :name, :token
 
-    def initialize(token)
-      @type = :computer
+    def initialize(token, name)
       @token = token
+      @name = name
     end
 
     def make_move(game, ui = nil)

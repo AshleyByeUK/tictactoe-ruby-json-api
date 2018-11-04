@@ -1,11 +1,12 @@
 require 'game/game'
 require 'game/game_engine'
+require 'game/player'
 
 module ConsoleClient
   class ConsoleClient
     def initialize(io, text_provider, ui)
       @io = io
-      @text_provider = text_provider
+      @tp = text_provider
       @ui = ui
     end
 
@@ -13,7 +14,7 @@ module ConsoleClient
       begin
         continue = display_main_menu
       end while !@io.exit?
-      @io.display(@text_provider.get_text(:quit))
+      @io.display(@tp::QUIT)
       @io.exit
     end
 
@@ -21,10 +22,10 @@ module ConsoleClient
 
     def display_main_menu
       @io.clear_screen
-      @io.display(@text_provider.get_text(:title))
-      @io.display(@text_provider.get_text(:help))
-      @io.display(@text_provider.get_text(:main_menu))
-      case @io.get_input(['1', '2'], @text_provider.get_text(:invalid_selection))
+      @io.display(@tp::TITLE)
+      @io.display(@tp::HELP)
+      @io.display(@tp::MAIN_MENU)
+      case @io.get_input(['1', '2'], @tp::INVALID_SELECTION)
       when '1'
         play_game
       else
@@ -33,8 +34,8 @@ module ConsoleClient
     end
 
     def play_game
-      player_one = configure_player(1, 'X')
-      player_two = configure_player(2, 'O') unless @io.exit?
+      player_one = configure_player(1, 'X', 'Player 1')
+      player_two = configure_player(2, 'O', 'Player 2') unless @io.exit?
       if !@io.exit?
         engine = Game::GameEngine.new(@ui)
         engine.start(player_one, player_two)
@@ -42,22 +43,22 @@ module ConsoleClient
       display_return_to_main_menu unless @io.exit?
     end
 
-    def configure_player(player, token)
+    def configure_player(player, token, name)
       @io.clear_screen
-      @io.display(@text_provider.get_text(:configure_player, {player: player}))
-      case @io.get_input(['1', '2', '3'], @text_provider.get_text(:invalid_selection))
+      @io.display(@tp::PLAYER_TYPE)
+      case @io.get_input(['1', '2', '3'], @tp::INVALID_SELECTION)
       when '1'
-        Game::Player.create(:human, token)
+        Game::Player.create(:human, token, name)
       when '2'
-        Game::Player.create(:easy, token)
+        Game::Player.create(:easy, token, name)
       when '3'
-        Game::Player.create(:hard, token)
+        Game::Player.create(:hard, token, name)
       end
     end
 
     def display_return_to_main_menu
-      @io.display(@text_provider.get_text(:return_to_main_menu))
-      input = @io.get_input(['y', 'n'], @text_provider.get_text(:invalid_selection))
+      @io.display(@tp::RETURN_TO_MAIN_MENU)
+      input = @io.get_input(['y', 'n'], @tp::INVALID_SELECTION)
       @io.exit = true if input != 'y'
     end
   end

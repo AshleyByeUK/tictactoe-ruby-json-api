@@ -5,8 +5,8 @@ require 'game/easy_player'
 module Game
   describe Game do
     before(:each) do
-      player_one = Player.create(:human, 'X')
-      player_two = Player.create(:human, 'O')
+      player_one = Player.create(:human, 'X', 'Player 1')
+      player_two = Player.create(:human, 'O', 'Player 2')
       @game = Game.new([player_one, player_two])
     end
 
@@ -117,8 +117,8 @@ module Game
 
     context "player 1 human player vs player 2 computer player" do
       before(:each) do
-        player_one = Player.create(:human, 'X')
-        player_two = Player.create(:easy, 'O')
+        player_one = Player.create(:human, 'X', 'Player 1')
+        player_two = Player.create(:easy, 'O', 'Player 2')
         @game = Game.new([player_one, player_two])
       end
 
@@ -135,15 +135,6 @@ module Game
         game = @game.place_token(1, 1)
         game = game.make_move
         expect(@game.current_player).to be 1
-      end
-
-      it "when the current player is a user it passes the user player type" do
-        expect(@game.current_player_user?).to be true
-      end
-
-      it "when the current player is a computer it passes the computer player type" do
-        game = @game.place_token(1, 1)
-        expect(game.current_player_user?).to be false
       end
     end
   end

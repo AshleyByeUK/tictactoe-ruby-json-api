@@ -1,17 +1,14 @@
-require 'game/hard_player'
-require 'game/game'
 require 'game/board'
-require 'game/game_rules'
+require 'game/game'
+require 'game/hard_player'
 
 module Game
   describe HardPlayer do
     50.times do
       before(:each) do
-        @p1_token = 'X'
-        @p2_token = 'O'
-        @player_one = HardPlayer.new(@p1_token)
-        @player_two = HardPlayer.new(@p2_token)
-        @players = [@player_one, @player_two]
+        player_one = HardPlayer.new('X', 'Player 1')
+        player_two = HardPlayer.new('O', 'Player 2')
+        @players = [player_one, player_two]
       end
 
       it "chooses the tie position when only one position remains" do

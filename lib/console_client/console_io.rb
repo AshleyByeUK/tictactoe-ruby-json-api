@@ -33,6 +33,7 @@ module ConsoleClient
         display(error_message) if input.state == :invalid_input && !exit?
       end until input.state == :valid_input || exit?
       exit? ? @exit_command : input.value
+      input.value
     end
 
     def get_input_from_user(valid_input)

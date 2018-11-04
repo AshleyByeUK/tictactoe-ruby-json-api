@@ -40,7 +40,7 @@ module Game
     end
 
     def game_over?
-      game_ended? || win? || tie?
+      win? || tie?
     end
 
     def win?
@@ -49,14 +49,6 @@ module Game
 
     def tie?
       @rules.game_result(@board) == :tie
-    end
-
-    def game_ended?
-      @state == :ended
-    end
-
-    def end_game
-      Game.new(@players, current_player: @current_player, board: @board, state: :ended)
     end
 
     def last_player

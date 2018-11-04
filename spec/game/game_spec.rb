@@ -98,23 +98,6 @@ module Game
       expect(game.game_over?).to be true
     end
 
-    it "can be ended early" do
-      game = @game.place_token(1, 1)
-                  .place_token(2, 2)
-                  .end_game()
-      expect(game.game_over?).to be true
-      expect(game.game_ended?).to be true
-      expect(game.win?).to be false
-      expect(game.tie?).to be false
-    end
-
-    it "is not over midway through a game" do
-      game = @game.place_token(1, 1)
-      expect(game.game_over?).to be false
-      expect(game.win?).to be false
-      expect(game.tie?).to be false
-    end
-
     context "player 1 human player vs player 2 computer player" do
       before(:each) do
         player_one = Player.create(:human, 'X', 'Player 1')

@@ -55,38 +55,17 @@ module ConsoleClient
       #   expect(@io.exit_called).to be true
       # end
 
-      # Moves mocked out in MockGameUI, so not recorded - so what am I testing?
       context "human vs human" do
         it "can start and end a game" do
-          @io.init('1', HUMAN, HUMAN, '1', '4', '2', '5', '3', QUIT)
+          @io.init('1', HUMAN, HUMAN, QUIT)
           @client.start
           expect(@io.gets_count).to eq 4
           expect(@io.exit_called).to be true
-        end
-
-        # Moves mocked out in MockGameUI, so not recorded - so what am I testing?
-        it "does not change player when invalid input is entered" do
-          @io.init('1', HUMAN, HUMAN, '1', 'BAD', '4', '2', '5', '3', QUIT)
-          @client.start
-          expect(@io.gets_count).to eq 4
-          expect(@io.exit_called).to be true
-        end
-
-        # Moves mocked out in MockGameUI, so not recorded - so what am I testing?
-        it "does not change player when a duplicate position is given" do
-          @io.init('1', HUMAN, HUMAN, '1', '1', '4', '2', '5', '3', QUIT)
-          @client.start
-          expect(@io.gets_count).to eq 4
-          expect(@io.exit_called).to be true
-        end
-
-        it "can play all the way to a tie" do
-          @io.init('1', HUMAN, HUMAN, '5', '9', '7', '3', '6', '4', '8', '2', '1', 'n')
         end
       end
 
       context "computer vs computer" do
-        it "can play at same until a tie or win is achieved" do
+        it "can play against same type until a tie or win is achieved" do
           @io.init('1', EASY, EASY, QUIT)
           @client.start
           expect(@io.gets_count).to eq 4

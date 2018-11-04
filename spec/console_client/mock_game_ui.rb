@@ -1,4 +1,4 @@
-module Game
+module ConsoleClient
   class MockGameUI
     attr_reader :show_game_state_called, :listen_for_user_input_called, :show_game_result_called
 

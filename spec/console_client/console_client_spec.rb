@@ -1,8 +1,8 @@
-require 'console_client/mock_io'
 require 'console_client/console_client'
+require 'console_client/mock_game_ui'
+require 'console_client/mock_io'
 require 'console_client/text_provider'
 require 'game/game'
-require 'game/mock_game_ui'
 
 module ConsoleClient
   HUMAN = '1'
@@ -15,7 +15,7 @@ module ConsoleClient
     before(:each) do
       @io = MockIO.new
       text_provider = TextProvider
-      ui = Game::MockGameUI.new
+      ui = MockGameUI.new
       @client = ConsoleClient.new(@io, text_provider, ui)
     end
 

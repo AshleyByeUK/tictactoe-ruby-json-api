@@ -1,11 +1,11 @@
+require 'console_client/mock_game_ui'
 require 'game/game_engine'
-require 'game/mock_game_ui'
 require 'game/mock_player'
 
 module Game
   describe GameEngine do
     before(:each) do
-      @ui = MockGameUI.new
+      @ui = ConsoleClient::MockGameUI.new
       @engine = GameEngine.new(@ui)
     end
 

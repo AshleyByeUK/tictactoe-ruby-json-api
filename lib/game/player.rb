@@ -4,10 +4,10 @@ require 'game/human_player'
 
 module Game
   class Player
-    def self.create(name, token, io)
+    def self.create(name, token)
       case name
       when :human
-        HumanPlayer.new(token, io)
+        HumanPlayer.new(token)
       when :easy
         EasyPlayer.new(token)
       when :hard

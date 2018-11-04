@@ -1,6 +1,5 @@
 require 'game/board'
 require 'game/game_rules'
-require 'game/player'
 
 module Game
   class Game
@@ -14,9 +13,9 @@ module Game
       @rules = GameRules.new()
     end
 
-    def make_move
+    def make_move(ui = nil)
       player = @players[@current_player - 1]
-      position = player.compute_move(self)
+      position = player.compute_move(self, ui)
       place_token(@current_player, position)
     end
 

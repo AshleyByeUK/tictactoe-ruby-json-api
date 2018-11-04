@@ -1,13 +1,12 @@
 require 'game/game'
-require 'console_client/console_io'
-require 'console_client/game_runner'
-require 'console_client/text_provider'
+require 'game/game_engine'
 
 module ConsoleClient
   class ConsoleClient
-    def initialize(io = ConsoleIO.new)
+    def initialize(io, text_provider, ui)
       @io = io
-      @text_provider = TextProvider.new
+      @text_provider = text_provider
+      @ui = ui
     end
 
     def start
@@ -16,11 +15,6 @@ module ConsoleClient
       end while !@io.exit?
       @io.display(@text_provider.get_text(:quit))
       @io.exit
-    end
-
-    def get_move(game)
-      prompt = "#{@text_provider.get_text(game.current_player)} "
-      @io.get_input(game.available_positions, @text_provider.get_text(:bad_position), prompt)
     end
 
     private
@@ -42,8 +36,8 @@ module ConsoleClient
       player_one = configure_player(1, 'X')
       player_two = configure_player(2, 'O') unless @io.exit?
       if !@io.exit?
-        runner = GameRunner.new(@io, @text_provider)
-        runner.play_game(player_one, player_two)
+        engine = Game::GameEngine.new(@ui)
+        engine.start(player_one, player_two)
       end
       display_return_to_main_menu unless @io.exit?
     end
@@ -53,11 +47,11 @@ module ConsoleClient
       @io.display(@text_provider.get_text(:configure_player, {player: player}))
       case @io.get_input(['1', '2', '3'], @text_provider.get_text(:invalid_selection))
       when '1'
-        Game::Player.create(:human, token, self)
+        Game::Player.create(:human, token)
       when '2'
-        Game::Player.create(:easy, token, self)
+        Game::Player.create(:easy, token)
       when '3'
-        Game::Player.create(:hard, token, self)
+        Game::Player.create(:hard, token)
       end
     end
 

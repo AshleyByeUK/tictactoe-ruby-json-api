@@ -1,14 +1,12 @@
 require 'game/game'
 require 'game/board'
 require 'game/easy_player'
-require 'game/mock_user_interface'
 
 module Game
   describe Game do
     before(:each) do
-      @user_interface = MockUserInterface.new
-      player_one = Player.create(:human, 'X', @user_interface)
-      player_two = Player.create(:human, 'O', @user_interface)
+      player_one = Player.create(:human, 'X')
+      player_two = Player.create(:human, 'O')
       @game = Game.new([player_one, player_two])
     end
 
@@ -119,8 +117,8 @@ module Game
 
     context "player 1 human player vs player 2 computer player" do
       before(:each) do
-        player_one = Player.create(:human, 'X', @user_interface)
-        player_two = Player.create(:easy, 'O', @user_interface)
+        player_one = Player.create(:human, 'X')
+        player_two = Player.create(:easy, 'O')
         @game = Game.new([player_one, player_two])
       end
 

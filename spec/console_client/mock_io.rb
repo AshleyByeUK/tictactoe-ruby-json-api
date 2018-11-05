@@ -31,13 +31,5 @@ module ConsoleClient
     def exit
       @exit_called = true
     end
-
-    def exit?
-      @exit
-    end
-
-    def exit=(exit)
-      @exit = exit
-    end
   end
 end

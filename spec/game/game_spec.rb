@@ -15,6 +15,11 @@ module Game
       expect(@game.current_player).to be 1
     end
 
+    it "provides the name of the current and last player" do
+      expect(@game.current_player_name).to eq 'Player 1'
+      expect(@game.last_player_name).to eq 'Player 2'
+    end
+
     it "allows tokens to be placed on a board" do
       game = @game.place_token(1, 1)
       expect(game.object_id).not_to eq @game.object_id

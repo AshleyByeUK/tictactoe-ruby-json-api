@@ -14,11 +14,14 @@ module ConsoleClient
     end
 
     def start
+      trap("SIGINT") do
+        quit_console
+      end
+
       begin
         quit = display_main_menu
       end until quit
-      @io.display(@text_provider::QUIT)
-      @io.exit
+      quit_console
     end
 
     private
@@ -67,6 +70,11 @@ module ConsoleClient
       @io.display(@text_provider::RETURN_TO_MAIN_MENU)
       continue = @io.get_input(['y', 'n', 'quit'], @text_provider::INVALID_SELECTION)
       continue == 'y' ? CONTINUE : EXIT
+    end
+
+    def quit_console
+      @io.display(@text_provider::QUIT)
+      @io.exit
     end
   end
 end

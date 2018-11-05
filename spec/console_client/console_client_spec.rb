@@ -48,12 +48,12 @@ module ConsoleClient
         expect(@io.exit_called).to be true
       end
 
-      # it "quits when typing 'quit' in the game play menu" do
-      #   @io.init('1', HUMAN, HUMAN, QUIT)
-      #   @client.start
-      #   expect(@io.gets_count).to eq 4
-      #   expect(@io.exit_called).to be true
-      # end
+      it "quits when typing 'ctrl-c'" do
+        @io.init('1', HUMAN, HUMAN, Process.kill("SIGINT", 0))
+        @client.start
+        expect(@io.gets_count).to eq 4
+        expect(@io.exit_called).to be true
+      end
 
       context "human vs human" do
         it "can start and end a game" do

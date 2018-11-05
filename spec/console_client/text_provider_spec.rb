@@ -12,7 +12,7 @@ module ConsoleClient
       end
 
       it "provides help text" do
-        expect(@text_provider::HELP).to match "Type 'quit' at any time to exit TicTacToe."
+        expect(@text_provider::HELP).to match "'quit' or 'ctrl-c'"
       end
 
       it "povides a main menu text" do

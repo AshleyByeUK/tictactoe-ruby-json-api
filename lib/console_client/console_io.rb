@@ -22,6 +22,10 @@ module ConsoleClient
       @device.exit
     end
 
+    def exit=(exit)
+      @exit = exit
+    end
+
     def exit?
       @exit
     end
@@ -50,10 +54,6 @@ module ConsoleClient
 
     def display_prompt(prompt = '')
       display("#{prompt}> ", '')
-    end
-
-    def exit=(exit)
-      @exit = exit
     end
   end
 end

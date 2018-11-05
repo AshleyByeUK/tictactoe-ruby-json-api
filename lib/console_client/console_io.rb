@@ -4,7 +4,7 @@ module ConsoleClient
 
     Input = Struct.new(:state, :value)
 
-    def initialize(exit_command: 'quit', device: Kernel)
+    def initialize(device = Kernel)
       @device = device
       @exit_command = exit_command
       @exit = false
@@ -22,21 +22,14 @@ module ConsoleClient
       @device.exit
     end
 
-    def exit=(exit)
-      @exit = exit
-    end
-
-    def exit?
-      @exit
-    end
-
     def get_input(valid_input, error_message = '', prompt = '')
-      begin
+      input = nil
+      loop do
         display_prompt(prompt)
         input = get_input_from_user(valid_input)
-        display(error_message) if input.state == :invalid_input && !exit?
-      end until input.state == :valid_input || exit?
-      exit? ? @exit_command : input.value
+        break if input.state == :valid_input
+        display(error_message)
+      end
       input.value
     end
 

@@ -21,7 +21,7 @@ module ConsoleClient
       if game.win?
         @io.display("#{@text_provider::GAME_OVER} #{game.last_player_name} #{@text_provider::WIN}")
       else game.tie?
-        @io.display("#{@text_provider::TIE}")
+        @io.display("#{@text_provider::GAME_OVER} #{@text_provider::TIE}")
       end
     end
 

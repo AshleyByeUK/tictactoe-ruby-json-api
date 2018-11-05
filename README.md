@@ -3,5 +3,56 @@
 
 # TicTacToe (Ruby Edtion)
 
-The venerable game of TicTacToe, written in Ruby.
+The venerable game of TicTacToe, written in Ruby, otherwise known as noughts and crosses.
 
+## Requirements
+
+The game depends on Ruby version 2.5.2 or greater. It has not been tested against earlier versions. Testing
+has only been carried out on macOS.
+
+## Downloading
+
+To download the source, clone the repository:
+
+```
+git clone git@github.com:AshleyByeUK/tictactoe-ruby.git
+cd tictactoe-ruby
+```
+
+All of the following commands assume the current working directory is `tictactoe-ruby`.
+
+## Playing
+
+Make sure that the game's entry point is executable:
+
+```
+chmod +x ./bin/tictactoe
+```
+
+Run the game (executable from anywhere - add the `bin` directory to your `PATH` if you want):
+
+```
+./bin/tictactoe
+```
+
+## Testing
+
+The tests can be run with `bundler`:
+
+```
+bundle install
+bundle exec rspec
+```
+
+Or:
+
+```
+bundle install
+bundle exec rspec --format doc
+```
+
+Once `rspec` has been run, you can view the code coverage report in your web browser:
+
+```
+open ./coverage/index.html
+```

@@ -2,7 +2,7 @@ module ConsoleClient
   class GameUI
     def initialize(io, text_provider)
       @io = io
-      @tp = text_provider
+      @text_provider = text_provider
     end
 
     def show_game_state(game)
@@ -13,15 +13,15 @@ module ConsoleClient
 
     def listen_for_user_input(game)
       prompt = "#{game.current_player_name} "
-      @io.get_input(game.available_positions, @tp::BAD_MOVE, prompt)
+      @io.get_input(game.available_positions, @text_provider::BAD_MOVE, prompt)
     end
 
     def show_game_result(game)
       options = {player: game.last_player}
       if game.win?
-        @io.display("#{@tp::GAME_OVER} #{game.last_player_name} #{@tp::WIN}")
+        @io.display("#{@text_provider::GAME_OVER} #{game.last_player_name} #{@text_provider::WIN}")
       else game.tie?
-        @io.display("#{@tp::TIE}")
+        @io.display("#{@text_provider::TIE}")
       end
     end
 
@@ -45,7 +45,7 @@ module ConsoleClient
     end
 
     def display_game_state(game)
-      @io.display("#{@tp::GOOD_MOVE}")
+      @io.display("#{@text_provider::GOOD_MOVE}")
     end
   end
 end

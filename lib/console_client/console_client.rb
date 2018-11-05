@@ -6,7 +6,7 @@ module ConsoleClient
   class ConsoleClient
     def initialize(io, text_provider, ui)
       @io = io
-      @tp = text_provider
+      @text_provider = text_provider
       @ui = ui
     end
 
@@ -14,7 +14,7 @@ module ConsoleClient
       begin
         continue = display_main_menu
       end while !@io.exit?
-      @io.display(@tp::QUIT)
+      @io.display(@text_provider::QUIT)
       @io.exit
     end
 
@@ -22,10 +22,10 @@ module ConsoleClient
 
     def display_main_menu
       @io.clear_screen
-      @io.display(@tp::TITLE)
-      @io.display(@tp::HELP)
-      @io.display(@tp::MAIN_MENU)
-      case @io.get_input(['1', '2'], @tp::INVALID_SELECTION)
+      @io.display(@text_provider::TITLE)
+      @io.display(@text_provider::HELP)
+      @io.display(@text_provider::MAIN_MENU)
+      case @io.get_input(['1', '2'], @text_provider::INVALID_SELECTION)
       when '1'
         play_game
       else
@@ -45,8 +45,8 @@ module ConsoleClient
 
     def configure_player(player, token, name)
       @io.clear_screen
-      @io.display(@tp::PLAYER_TYPE)
-      case @io.get_input(['1', '2', '3'], @tp::INVALID_SELECTION)
+      @io.display(@text_provider::PLAYER_TYPE)
+      case @io.get_input(['1', '2', '3'], @text_provider::INVALID_SELECTION)
       when '1'
         Game::Player.create(:human, token, name)
       when '2'
@@ -57,8 +57,8 @@ module ConsoleClient
     end
 
     def display_return_to_main_menu
-      @io.display(@tp::RETURN_TO_MAIN_MENU)
-      input = @io.get_input(['y', 'n'], @tp::INVALID_SELECTION)
+      @io.display(@text_provider::RETURN_TO_MAIN_MENU)
+      input = @io.get_input(['y', 'n'], @text_provider::INVALID_SELECTION)
       @io.exit = true if input != 'y'
     end
   end

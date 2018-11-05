@@ -5,12 +5,12 @@ module Game
   class Game
     attr_reader :current_player, :state, :players
 
-    def initialize(players, current_player: 1, board: Board.new(), state: :ready)
+    def initialize(players, current_player: 1, board: Board.new, state: :ready)
       @players = players
       @current_player = current_player
       @board = board
       @state = state
-      @rules = GameRules.new()
+      @rules = GameRules.new
     end
 
     def make_move(ui = nil)

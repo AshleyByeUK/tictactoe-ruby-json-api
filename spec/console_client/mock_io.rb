@@ -2,8 +2,7 @@ module ConsoleClient
   class MockIO
     attr_reader :exit_called, :gets_count
 
-    def initialize(exit_command)
-      @exit_command = exit_command
+    def initialize()
       @device = StringIO.new
     end
 
@@ -17,9 +16,7 @@ module ConsoleClient
 
     def get_input(valid_input, error_message = '', prompt = '')
       @gets_count += 1
-      input = @device.gets.strip.downcase
-      @exit = true if input == @exit_command
-      input
+      @device.gets.strip.downcase
     end
 
     def display(text, new_line = "\n")

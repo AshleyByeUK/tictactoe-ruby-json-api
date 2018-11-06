@@ -38,14 +38,14 @@ module ConsoleClient
         end
       end
 
-      ['quit', 'QUIT', 'quit ', ' quit', ' quit '].each do |command|
-        it "accepts '#{command}' as a valid quit command'" do
-          io = ConsoleIO.new(StringIO.new(command))
-          input = io.get_input_from_user(['quit'])
-          expect(input.state).to be :valid_input
-          expect(input.value).to eq 'quit'
-        end
-      end
+      # ['quit', 'QUIT', 'quit ', ' quit', ' quit '].each do |command|
+      #   it "accepts '#{command}' as a valid quit command'" do
+      #     io = ConsoleIO.new(StringIO.new(command))
+      #     input = io.get_input_from_user(['quit'])
+      #     expect(input.state).to be :valid_input
+      #     expect(input.value).to eq 'quit'
+      #   end
+      # end
     end
   end
 end

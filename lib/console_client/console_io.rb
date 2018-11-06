@@ -1,13 +1,9 @@
 module ConsoleClient
   class ConsoleIO
-    attr_reader :exit_command
-
     Input = Struct.new(:state, :value)
 
     def initialize(device = Kernel)
       @device = device
-      @exit_command = exit_command
-      @exit = false
     end
 
     def display(text, new_line = "\n")
@@ -35,7 +31,6 @@ module ConsoleClient
 
     def get_input_from_user(valid_input)
       input = @device.gets.strip.downcase
-      @exit = true if input == @exit_command
       if valid_input.map { |v| v.to_s }.include?(input)
         Input.new(:valid_input, input)
       else

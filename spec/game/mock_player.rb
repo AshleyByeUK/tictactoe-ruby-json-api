@@ -11,5 +11,9 @@ module Game
       ui.listen_for_user_input(game)
       @moves.pop
     end
+
+    def name
+      'Mock Player'
+    end
   end
 end

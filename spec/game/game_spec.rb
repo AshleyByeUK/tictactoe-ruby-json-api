@@ -1,33 +1,41 @@
 require 'game/game'
-require 'game/board'
-require 'game/easy_player'
-require 'game/mock_user_interface'
+require 'game/mock_player'
+require 'console_client/mock_game_ui'
 
 module Game
   describe Game do
-    before(:each) do
-      @user_interface = MockUserInterface.new
-      player_one = Player.create(:human, 'X', @user_interface)
-      player_two = Player.create(:human, 'O', @user_interface)
-      @game = Game.new([player_one, player_two])
+    it "has a ready state and current player when initialised" do
+      mock_player = MockPlayer.new('X')
+      game = Game.new([mock_player, mock_player])
+      expect(game.state).to eq :ready
+      expect(game.current_player).to be 1
     end
 
-    it "has a ready state and current player when initialised" do
-      expect(@game.state).to eq :ready
-      expect(@game.current_player).to be 1
+    it "provides the name of the current and last player" do
+      mock_player = MockPlayer.new('X')
+      game = Game.new([mock_player, mock_player])
+      expect(game.current_player_name).to eq 'Mock Player'
+      expect(game.last_player_name).to eq 'Mock Player'
     end
 
     it "allows tokens to be placed on a board" do
-      game = @game.place_token(1, 1)
-      expect(game.object_id).not_to eq @game.object_id
-      expect(game.state).to eq :ok
-      expect(game.current_board).to eq ['X', *2..9]
-      expect(game.available_positions).to eq [*2..9]
+      player_one = MockPlayer.new('X', [1])
+      player_two = MockPlayer.new('O')
+      game = Game.new([player_one, player_two])
+      updated_game = game.make_move(ConsoleClient::MockGameUI.new)
+      expect(updated_game.object_id).not_to eq game.object_id
+      expect(updated_game.state).to eq :ok
+      expect(updated_game.current_board).to eq ['X', *2..9]
+      expect(updated_game.available_positions).to eq [*2..9]
     end
 
     it "does not allow tokens to be placed on top of other tokens" do
-      game = @game.place_token(1, 1)
-      game = game.place_token(2, 1)
+      game_ui = ConsoleClient::MockGameUI.new
+      player_one = MockPlayer.new('X', [1])
+      player_two = MockPlayer.new('O', [1])
+      game = Game.new([player_one, player_two])
+          .make_move(game_ui)
+          .make_move(game_ui)
       expect(game.state).to eq :bad_position
       expect(game.current_board).to eq ['X', *2..9]
       expect(game.available_positions).to eq [*2..9]
@@ -35,118 +43,84 @@ module Game
 
     [-1, 10, "a", "A", "pos", "£", " ", "", nil].each do |position|
       it "does not allow tokens to be placed in invalid position of '#{position}''" do
-        game = @game.place_token(1, position)
+        player_one = MockPlayer.new('X', [position])
+        player_two = MockPlayer.new('O')
+        game = Game.new([player_one, player_two])
+            .make_move(ConsoleClient::MockGameUI.new)
         expect(game.state).to eq :bad_position
       end
     end
 
     it "after one move player two is the current player" do
-      game = @game.place_token(1, 1)
+      player_one = MockPlayer.new('X', [1])
+      player_two = MockPlayer.new('O')
+      game = Game.new([player_one, player_two])
+          .make_move(ConsoleClient::MockGameUI.new)
       expect(game.current_player).to be 2
     end
 
     it "after player one and two make a move player one is the current player" do
-      game = @game.place_token(1, 1)
-      game = game.place_token(2, 2)
+      game_ui = ConsoleClient::MockGameUI.new
+      player_one = MockPlayer.new('X', [1])
+      player_two = MockPlayer.new('O', [2])
+      game = Game.new([player_one, player_two])
+          .make_move(game_ui)
+          .make_move(game_ui)
       expect(game.current_player).to be 1
     end
 
     it "correctly places player twos token on the board" do
-      game = @game.place_token(1, 1)
-      game = game.place_token(2, 2)
+      game_ui = ConsoleClient::MockGameUI.new
+      player_one = MockPlayer.new('X', [1])
+      player_two = MockPlayer.new('O', [2])
+      game = Game.new([player_one, player_two])
+          .make_move(game_ui)
+          .make_move(game_ui)
       expect(game.current_board).to eq ['X', 'O', *3..9]
       expect(game.available_positions).to eq [*3..9]
     end
 
-    it "does not let an invalid player make a move" do
-      expect { @game.place_token(3, 1) }.to raise_error(RuntimeError, 'Invalid player specified')
-    end
-
     it "is still a player's turn after bad move" do
-      game = @game.place_token(1, "BAD")
+      game_ui = ConsoleClient::MockGameUI.new
+      player_one = MockPlayer.new('X', ["BAD"])
+      player_two = MockPlayer.new('O')
+      game = Game.new([player_one, player_two])
+          .make_move(game_ui)
       expect(game.current_player).to be 1
     end
 
-    it "does not let the wrong player make a move" do
-      game = @game.place_token(1, 1)
-      expect { game.place_token(1, 2) }.to raise_error(RuntimeError, 'Invalid player specified')
-    end
-
     it "returns the status and result of a tied game" do
-      game = @game.place_token(1, 1)
-                  .place_token(2, 2)
-                  .place_token(1, 3)
-                  .place_token(2, 5)
-                  .place_token(1, 4)
-                  .place_token(2, 7)
-                  .place_token(1, 9)
-                  .place_token(2, 6)
-                  .place_token(1, 8)
+      game_ui = ConsoleClient::MockGameUI.new
+      player_one = MockPlayer.new('X', [1, 3, 4, 9, 8])
+      player_two = MockPlayer.new('O', [2, 5, 7, 6])
+      game = Game.new([player_one, player_two])
+          .make_move(game_ui)
+          .make_move(game_ui)
+          .make_move(game_ui)
+          .make_move(game_ui)
+          .make_move(game_ui)
+          .make_move(game_ui)
+          .make_move(game_ui)
+          .make_move(game_ui)
+          .make_move(game_ui)
       expect(game.state).to eq :game_over
       expect(game.tie?).to be true
       expect(game.game_over?).to be true
     end
 
     it "returns the status and result of a won game" do
-      game = @game.place_token(1, 1)
-                  .place_token(2, 2)
-                  .place_token(1, 3)
-                  .place_token(2, 4)
-                  .place_token(1, 5)
-                  .place_token(2, 6)
-                  .place_token(1, 7)
+      game_ui = ConsoleClient::MockGameUI.new
+      player_one = MockPlayer.new('X', [1, 2, 3])
+      player_two = MockPlayer.new('O', [4, 5])
+      game = Game.new([player_one, player_two])
+          .make_move(game_ui)
+          .make_move(game_ui)
+          .make_move(game_ui)
+          .make_move(game_ui)
+          .make_move(game_ui)
       expect(game.state).to eq :game_over
       expect(game.win?).to be true
       expect(game.game_over?).to be true
-    end
-
-    it "can be ended early" do
-      game = @game.place_token(1, 1)
-                  .place_token(2, 2)
-                  .end_game()
-      expect(game.game_over?).to be true
-      expect(game.game_ended?).to be true
-      expect(game.win?).to be false
-      expect(game.tie?).to be false
-    end
-
-    it "is not over midway through a game" do
-      game = @game.place_token(1, 1)
-      expect(game.game_over?).to be false
-      expect(game.win?).to be false
-      expect(game.tie?).to be false
-    end
-
-    context "player 1 human player vs player 2 computer player" do
-      before(:each) do
-        player_one = Player.create(:human, 'X', @user_interface)
-        player_two = Player.create(:easy, 'O', @user_interface)
-        @game = Game.new([player_one, player_two])
-      end
-
-      it "is first players turn after no moves" do
-        expect(@game.current_player).to be 1
-      end
-
-      it "is computer players turn after one correct human move" do
-        game = @game.place_token(1, 1)
-        expect(game.current_player).to be 2
-      end
-
-      it "is human players turn after computer's move" do
-        game = @game.place_token(1, 1)
-        game = game.make_move
-        expect(@game.current_player).to be 1
-      end
-
-      it "when the current player is a user it passes the user player type" do
-        expect(@game.current_player_user?).to be true
-      end
-
-      it "when the current player is a computer it passes the computer player type" do
-        game = @game.place_token(1, 1)
-        expect(game.current_player_user?).to be false
-      end
     end
   end
 end

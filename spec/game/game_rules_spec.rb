@@ -4,19 +4,19 @@ require 'game/game_rules'
 module Game
   describe GameRules do
     before(:each) do
-      @rules = GameRules.new()
+      @rules = GameRules.new
     end
 
     it "is game over with a tie if no winning combination is played" do
       positions = ['X', 'O', 'X', 'X', 'O', 'O', 'O', 'X', 'X']
       board = Board.new(positions)
-      rules = GameRules.new()
+      rules = GameRules.new
       expect(rules.game_over?(board)).to be true
       expect(rules.game_result(board)).to eq :tie
     end
 
     it "is not game over when no win and no tie" do
-      board = Board.new()
+      board = Board.new
       expect(@rules.game_over?(board)).to be false
       expect(@rules.game_result(board)).to eq :playing
     end

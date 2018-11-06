@@ -1,15 +1,14 @@
 module Game
   class HumanPlayer
-    attr_reader :type, :token
+    attr_reader :name, :token
 
-    def initialize(token, user_interface)
-      @user_interface = user_interface
-      @type = :user
+    def initialize(token, name)
       @token = token
+      @name = name
     end
 
-    def compute_move(game)
-      @user_interface.get_move(game).to_i
+    def make_move(game, ui)
+      ui.listen_for_user_input(game).to_i
     end
   end
 end

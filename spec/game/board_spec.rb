@@ -4,7 +4,7 @@ module Game
   describe Board do
     context "a 3x3 board" do
       before(:each) do
-        @board = Board.new()
+        @board = Board.new
       end
 
       it "has 9 available positions" do
@@ -33,7 +33,7 @@ module Game
       end
 
       it "is equal to another board when all positions are the same" do
-        expect(@board).to eq Board.new()
+        expect(@board).to eq Board.new
       end
     end
   end

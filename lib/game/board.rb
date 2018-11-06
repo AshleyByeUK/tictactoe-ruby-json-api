@@ -1,10 +1,9 @@
 module Game
   class Board
-    EMPTY_BOARD = (1..9).to_a
+    attr_reader :positions, :size
 
-    attr_reader :positions
-
-    def initialize(positions = EMPTY_BOARD)
+    def initialize(size = 3, positions = (1..size*size).to_a)
+      @size = size
       @positions = positions
     end
 
@@ -15,11 +14,39 @@ module Game
     def place_token(position, token)
       positions = Array.new(@positions)
       positions[position - 1] = token if available_positions.include?(position)
-      Board.new(positions)
+      Board.new(size, positions)
+    end
+
+    def possible_winning_positions
+      get_rows
+          .concat(get_columns)
+          .concat(get_diagonals)
     end
 
     def ==(other)
       @positions == other.positions
+    end
+
+    private
+
+    def get_rows
+      @positions.each_slice(@size).to_a
+    end
+
+    def get_columns
+      get_rows.transpose
+    end
+
+    def get_diagonals
+      [get_top_left_bottom_right_diagonal, get_top_right_bottom_left_diagonal]
+    end
+
+    def get_top_left_bottom_right_diagonal
+      get_rows.select.with_index.map { |row, i| row[i] }.to_a
+    end
+
+    def get_top_right_bottom_left_diagonal
+      get_rows.select.with_index.map { |row, i| row.reverse[i] }.to_a
     end
   end
 end

@@ -63,10 +63,6 @@ module Game
 
     private
 
-    def invalid_player?(player)
-      @current_player != player || player < 1 || player > @players.length
-    end
-
     def swap_current_player
       @current_player == 1 ? 2 : 1
     end

@@ -20,7 +20,7 @@ module Game
       positions = []
 
       game.available_positions.each do |position|
-        g = game.place_token(game.current_player, position)
+        g = game.place_token(position)
         scores << minimax(g)
         positions << position
       end

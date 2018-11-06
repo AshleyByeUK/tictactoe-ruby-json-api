@@ -16,13 +16,11 @@ module Game
     def make_move(ui = nil)
       player = @players[@current_player - 1]
       position = player.make_move(self, ui)
-      place_token(@current_player, position)
+      place_token(position)
     end
 
-    def place_token(player, position)
-      raise RuntimeError, 'Invalid player specified' if invalid_player?(player)
-
-      board = @board.place_token(position, @players[player - 1].token)
+    def place_token(position)
+      board = @board.place_token(position, @players[@current_player - 1].token)
       if board != @board
         state = @rules.game_result(board) == :playing ? :ok : :game_over
         Game.new(@players, current_player: swap_current_player, board: board, state: state)

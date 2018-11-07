@@ -20,7 +20,7 @@ module ConsoleClient
 
     context "menu system" do
       it "exits when quit option is specified in main menu" do
-        @io.init('2')
+        @io.init('3')
         @client.start
         expect(@io.gets_count).to eq 1
         expect(@io.exit_called).to be true
@@ -41,8 +41,15 @@ module ConsoleClient
       end
 
       context "computer vs computer" do
-        it "can play against same type until a tie or win is achieved" do
+        it "with a 3x3 board can play against same type until a tie or win is achieved" do
           @io.init('1', EASY, EASY, QUIT)
+          @client.start
+          expect(@io.gets_count).to eq 4
+          expect(@io.exit_called).to be true
+        end
+
+        it "with a 4x4 board can play against same type until a tie or win is achieved" do
+          @io.init('2', EASY, EASY, QUIT)
           @client.start
           expect(@io.gets_count).to eq 4
           expect(@io.exit_called).to be true

@@ -3,9 +3,14 @@ require 'game/game_rules'
 
 module Game
   class Game
+    BAD_POSITION = :bad_position
+    GAME_OVER = :game_over
+    OK = :ok
+    READY = :ready
+
     attr_reader :current_player, :state, :players
 
-    def initialize(players, current_player: 1, board: Board.new, state: :ready)
+    def initialize(players, current_player: 1, board_size: 3, board: Board.new(board_size), state: READY)
       @players = players
       @current_player = current_player
       @board = board
@@ -22,15 +27,15 @@ module Game
     def place_token(position)
       board = @board.place_token(position, @players[@current_player - 1].token)
       if board != @board
-        state = @rules.game_result(board) == :playing ? :ok : :game_over
+        state = @rules.game_result(board) == :playing ? OK : GAME_OVER
         Game.new(@players, current_player: swap_current_player, board: board, state: state)
       else
-        Game.new(@players, current_player: @current_player, board: board, state: :bad_position)
+        Game.new(@players, current_player: @current_player, board: board, state: BAD_POSITION)
       end
     end
 
     def current_board
-      @board.positions
+      @board
     end
 
     def available_positions

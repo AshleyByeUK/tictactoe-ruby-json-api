@@ -11,6 +11,12 @@ module Game
       expect(game.current_player).to be 1
     end
 
+    it "can have a custom board size" do
+      mock_player = MockPlayer.new('X')
+      game = Game.new([mock_player, mock_player], board_size: 4)
+      expect(game.available_positions.length).to eq 16
+    end
+
     it "provides the name of the current and last player" do
       mock_player = MockPlayer.new('X')
       game = Game.new([mock_player, mock_player])
@@ -25,7 +31,7 @@ module Game
       updated_game = game.make_move(ConsoleClient::MockGameUI.new)
       expect(updated_game.object_id).not_to eq game.object_id
       expect(updated_game.state).to eq :ok
-      expect(updated_game.current_board).to eq ['X', *2..9]
+      expect(updated_game.current_board).to eq Board.new(3, ['X', *2..9])
       expect(updated_game.available_positions).to eq [*2..9]
     end
 
@@ -37,7 +43,7 @@ module Game
           .make_move(game_ui)
           .make_move(game_ui)
       expect(game.state).to eq :bad_position
-      expect(game.current_board).to eq ['X', *2..9]
+      expect(game.current_board).to eq Board.new(3, ['X', *2..9])
       expect(game.available_positions).to eq [*2..9]
     end
 
@@ -76,7 +82,7 @@ module Game
       game = Game.new([player_one, player_two])
           .make_move(game_ui)
           .make_move(game_ui)
-      expect(game.current_board).to eq ['X', 'O', *3..9]
+      expect(game.current_board).to eq Board.new(3, ['X', 'O', *3..9])
       expect(game.available_positions).to eq [*3..9]
     end
 

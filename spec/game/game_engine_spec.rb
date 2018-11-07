@@ -26,5 +26,15 @@ module Game
       expect(@ui.listen_for_user_input_called).to eq 9
       expect(@ui.show_game_result_called). to eq 1
     end
+
+    it "runs a game on a custom sized board" do
+      p1 = MockPlayer.new('X', 1, 2, 3, 4)
+      p2 = MockPlayer.new('O', 5, 6, 7)
+      @engine = GameEngine.new(@ui, 4)
+      @engine.start(p1, p2)
+      expect(@ui.show_game_state_called).to eq 8
+      expect(@ui.listen_for_user_input_called).to eq 7
+      expect(@ui.show_game_result_called). to eq 1
+    end
   end
 end

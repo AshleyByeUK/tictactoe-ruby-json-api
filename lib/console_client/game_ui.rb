@@ -8,7 +8,7 @@ module ConsoleClient
     def show_game_state(game)
       @io.clear_screen
       display_board(game.current_board)
-      display_game_state(game)
+      display_message(game)
     end
 
     def listen_for_user_input(game)
@@ -28,24 +28,32 @@ module ConsoleClient
     private
 
     def display_board(board)
+      rows = board.get_rows
       @io.display ""
-      draw_row(board[0], board[1], board[2])
-      draw_spacer_row
-      draw_row(board[3], board[4], board[5])
-      draw_spacer_row
-      draw_row(board[6], board[7], board[8])
+      rows.each.with_index do |row, i|
+        draw_row(row, board.size)
+        draw_spacer_row(row, board.size) unless i == rows.length - 1
+      end
     end
 
-    def draw_row(a, b, c)
-      @io.display(" #{a} | #{b} | #{c} ")
+    def draw_row(row, width)
+      r = ""
+      row.each.with_index do |p, i|
+        r += " #{p} ".center(width)
+        r += "|" unless i == row.length - 1
+      end
+      @io.display(r)
     end
 
-    def draw_spacer_row
-      @io.display('-----------')
+    def draw_spacer_row(row, width)
+      spacers = (row.length * width) + (row.length - 1)
+      spacer_row = ""
+      spacers.times { spacer_row += "-" }
+      @io.display(spacer_row)
     end
 
-    def display_game_state(game)
-      @io.display("#{@text_provider::GOOD_MOVE}")
+    def display_message(game)
+      @io.display("#{@text_provider::GOOD_MOVE}") unless game.state == Game::Game::READY
     end
   end
 end

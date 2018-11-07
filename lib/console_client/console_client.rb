@@ -31,19 +31,22 @@ module ConsoleClient
       @io.display(@text_provider::TITLE)
       @io.display(@text_provider::HELP)
       @io.display(@text_provider::MAIN_MENU)
-      case @io.get_input(['1', '2'], @text_provider::INVALID_SELECTION)
+      case @io.get_input(['1', '2', '3'], @text_provider::INVALID_SELECTION)
       when '1'
-        play_game
+        play_game(3)
+        display_return_to_main_menu
+      when '2'
+        play_game(4)
         display_return_to_main_menu
       else
         EXIT
       end
     end
 
-    def play_game
+    def play_game(board_size)
       player_one = configure_player(1, 'X', 'Player 1')
       player_two = configure_player(2, 'O', 'Player 2')
-      engine = Game::GameEngine.new(@ui)
+      engine = Game::GameEngine.new(@ui, board_size)
       engine.start(player_one, player_two)
     end
 

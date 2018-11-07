@@ -16,7 +16,9 @@ module ConsoleClient
       end
 
       it "povides a main menu text" do
-        expect(@text_provider::MAIN_MENU).to match "1. Play a game.\n2. Quit."
+        expect(@text_provider::MAIN_MENU).to include "1. Play a game (3x3)."
+        expect(@text_provider::MAIN_MENU).to include "2. Play a game (4x4).\n"
+        expect(@text_provider::MAIN_MENU).to include "3. Quit."
       end
 
       it "povides a player choice text" do

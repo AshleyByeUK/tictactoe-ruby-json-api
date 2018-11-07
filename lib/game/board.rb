@@ -23,15 +23,15 @@ module Game
           .concat(get_diagonals)
     end
 
+    def get_rows
+      @positions.each_slice(@size).to_a
+    end
+
     def ==(other)
       @positions == other.positions
     end
 
     private
-
-    def get_rows
-      @positions.each_slice(@size).to_a
-    end
 
     def get_columns
       get_rows.transpose

@@ -77,13 +77,13 @@ module Game
       expect(duration_ms).to be <= 200
     end
 
-    it "computes a move for an empty 4x4 board in no more than 200ms" do
+    it "computes a move for an empty 4x4 board in no more than 1s" do
       game = Game.new(@players, board_size: 4)
       start = Time.now
       game = game.make_move
       finish = Time.now
       duration_ms = ((finish - start) * 1000).to_i
-      expect(duration_ms).to be <= 200
+      expect(duration_ms).to be <= 1000
     end
   end
 end

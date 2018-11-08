@@ -20,12 +20,18 @@ module Game
 
     def win?(board)
       win = false
-      possible_winning_positions(board).each do |combination|
-        win = winning_combination?(combination)
-        @winner = winning_player(combination) if win
-        break if win
+      unless enough_made_moves_for_a_win?(board)
+        possible_winning_positions(board).each do |combination|
+          win = winning_combination?(combination)
+          @winner = winning_player(combination) if win
+          break if win
+        end
       end
       win
+    end
+
+    def enough_made_moves_for_a_win?(board)
+      board.available_positions.length > board.positions.length - ((2 * board.size) - 1)
     end
 
     def possible_winning_positions(board)

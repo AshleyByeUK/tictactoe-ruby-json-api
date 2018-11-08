@@ -45,6 +45,16 @@ module Game
         expect(@rules.game_over?(board)).to be true
         expect(@rules.game_result(board)).to eq :win
       end
+
+      it "can be asked if a player has won" do
+        board = Board.new(3, ['X', 'X', 'X', 'O', 'O', 6, 7, 8, 9])
+        expect(@rules.winner?(board, 'X')).to be true
+      end
+
+      it "can be asked if a player has won" do
+        board = Board.new(3, ['X', 'X', 'X', 'O', 'O', 6, 7, 8, 9])
+        expect(@rules.winner?(board, 'O')).to be false
+      end
     end
 
     context "a 4x4 board" do

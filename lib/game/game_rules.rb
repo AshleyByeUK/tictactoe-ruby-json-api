@@ -1,5 +1,9 @@
 module Game
   class GameRules
+    def initialize
+      @winner = nil
+    end
+
     def game_over?(board)
       win?(board) || tie?(board)
     end
@@ -8,13 +12,24 @@ module Game
       game_over?(board) ? game_over_reason(board) : :playing
     end
 
+    def winner?(board, token)
+      winner = false
+      p = board.possible_winning_positions
+      p.each do |combination|
+        winner = win?(board)&& combination.uniq.length == 1 && combination.uniq[0] == token
+        break if winner
+      end
+      winner
+    end
+
     private
 
     def win?(board)
       win = false
       p = board.possible_winning_positions
       p.each do |combination|
-        win = winning_combination?(combination) if win == false
+        win = winning_combination?(combination)
+        break if win
       end
       win
     end

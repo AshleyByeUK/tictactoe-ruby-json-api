@@ -8,39 +8,57 @@ module Game
     end
 
     def make_move(game, ui = nil)
-      @me = game.current_player
-      minimax(game)
-      @position
+      @other_token = game.other_players_token
+      @rules = game.rules
+      find_best_move(game.current_board)
     end
 
-    def minimax(game)
-      return score(game) if game.game_over?
+    def find_best_move(board)
+      best_score = -1000
+      best_move = -1
 
-      scores = []
-      positions = []
-
-      game.available_positions.each do |position|
-        g = game.place_token(position)
-        scores << minimax(g)
-        positions << position
+      board.available_positions.each do |position|
+        b = board.place_token(position, @token)
+        score = minimax(b, 0, false)
+        if (score > best_score)
+          best_score = score
+          best_move = position
+        end
       end
+      best_move
+    end
 
-      if game.current_player == @me
-        index = scores.select.with_index.max[1]
-        @position = positions[index]
-        scores[index]
+    def minimax(board, depth, is_maximising)
+      return score(board, depth) if @rules.game_over?(board)
+
+      score = nil
+
+      if is_maximising
+        max_score = -1000
+        board.available_positions.each do |position|
+          b = board.place_token(position, @token)
+          score = minimax(b, depth + 1, false)
+          max_score = [max_score, score].max
+          score = max_score
+        end
       else
-        index = scores.select.with_index.min[1]
-        @position = positions[index]
-        scores[index]
+        min_score = 1000
+        board.available_positions.each do |position|
+          b = board.place_token(position, @other_token)
+          score = minimax(b, depth + 1, true)
+          min_score = [min_score, score].min
+          score = min_score
+        end
       end
+
+      score
     end
 
-    def score(game)
-      if game.win? && game.last_player == @me
-        100
-      elsif game.win? && game.last_player != @me
-        -100
+    def score(board, depth)
+      if @rules.winner?(board, @token)
+        100 - depth
+      elsif @rules.winner?(board, @other_token)
+        -100 + depth
       else
         0
       end

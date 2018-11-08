@@ -8,7 +8,7 @@ module Game
     OK = :ok
     READY = :ready
 
-    attr_reader :current_player, :state, :players
+    attr_reader :current_player, :rules, :state, :players
 
     def initialize(players, current_player: 1, board_size: 3, board: Board.new(board_size), state: READY)
       @players = players
@@ -64,6 +64,10 @@ module Game
 
     def last_player_name
       @players[swap_current_player - 1].name
+    end
+
+    def other_players_token
+      @players[swap_current_player - 1].token
     end
 
     private

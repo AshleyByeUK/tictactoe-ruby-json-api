@@ -1,7 +1,7 @@
 module Game
   class GameRules
-    def initialize
-      @winner = nil
+    def initialize(board)
+      @winning_indices = board.compute_winning_indices
     end
 
     def game_over?(board)
@@ -20,16 +20,24 @@ module Game
 
     def win?(board)
       win = false
-      board.possible_winning_positions.each do |combination|
+      possible_winning_positions(board).each do |combination|
         win = winning_combination?(combination)
-        @winner = combination[0] if win
+        @winner = winning_player(combination) if win
         break if win
       end
       win
     end
 
+    def possible_winning_positions(board)
+      @winning_indices.map { |i| board.positions[i] }.each_slice(board.size).to_a
+    end
+
     def winning_combination?(combination)
       combination.uniq.length == 1
+    end
+
+    def winning_player(winning_combination)
+      winning_combination[0]
     end
 
     def tie?(board)

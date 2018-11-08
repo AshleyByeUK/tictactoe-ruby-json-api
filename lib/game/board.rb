@@ -17,12 +17,6 @@ module Game
       Board.new(@size, positions)
     end
 
-    def possible_winning_positions
-      get_rows
-          .concat(get_columns)
-          .concat(get_diagonals)
-    end
-
     def get_rows
       @positions.each_slice(@size).to_a
     end
@@ -31,22 +25,37 @@ module Game
       @positions == other.positions
     end
 
+    def compute_winning_indices
+      row_indices = compute_row_indices
+      column_indices = compute_column_indices(row_indices)
+      diagonal_indices = compute_diagonal_indices(row_indices)
+      row_indices
+          .concat(column_indices)
+          .concat(diagonal_indices)
+          .flatten
+    end
+
     private
 
-    def get_columns
-      get_rows.transpose
+    def compute_row_indices
+      @positions.select.with_index.map { |p, i| i }.each_slice(@size).to_a
     end
 
-    def get_diagonals
-      [get_top_left_bottom_right_diagonal, get_top_right_bottom_left_diagonal]
+    def compute_column_indices(row_indices)
+      row_indices.transpose
     end
 
-    def get_top_left_bottom_right_diagonal
-      get_rows.select.with_index.map { |row, i| row[i] }.to_a
+    def compute_diagonal_indices(row_indices)
+      compute_top_left_bottom_right_diagonal(row_indices)
+          .concat(compute_top_right_bottom_left_diagonal(row_indices))
     end
 
-    def get_top_right_bottom_left_diagonal
-      get_rows.select.with_index.map { |row, i| row.reverse[i] }.to_a
+    def compute_top_left_bottom_right_diagonal(row_indices)
+      row_indices.select.with_index.map { |row, i| row[i] }.to_a
+    end
+
+    def compute_top_right_bottom_left_diagonal(row_indices)
+      row_indices.select.with_index.map { |row, i| row.reverse[i] }.to_a
     end
   end
 end

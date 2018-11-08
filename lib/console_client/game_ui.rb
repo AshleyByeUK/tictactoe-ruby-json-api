@@ -17,7 +17,6 @@ module ConsoleClient
     end
 
     def show_game_result(game)
-      options = {player: game.last_player}
       if game.win?
         @io.display("#{@text_provider::GAME_OVER} #{game.last_player_name} #{@text_provider::WIN}")
       else game.tie?

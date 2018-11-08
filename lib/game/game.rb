@@ -15,7 +15,7 @@ module Game
       @current_player = current_player
       @board = board
       @state = state
-      @rules = GameRules.new
+      @rules = GameRules.new(@board)
     end
 
     def make_move(ui = nil)

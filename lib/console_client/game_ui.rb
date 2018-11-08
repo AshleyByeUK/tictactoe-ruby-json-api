@@ -6,9 +6,9 @@ module ConsoleClient
     end
 
     def show_game_state(game)
+      output = format_board(game.current_board) + format_message(game)
       @io.clear_screen
-      display_board(game.current_board)
-      display_message(game)
+      @io.display(output)
     end
 
     def listen_for_user_input(game)
@@ -17,42 +17,45 @@ module ConsoleClient
     end
 
     def show_game_result(game)
+      result = ""
       if game.win?
-        @io.display("#{@text_provider::GAME_OVER} #{game.last_player_name} #{@text_provider::WIN}")
+        result = "#{@text_provider::GAME_OVER} #{game.last_player_name} #{@text_provider::WIN}"
       else game.tie?
-        @io.display("#{@text_provider::GAME_OVER} #{@text_provider::TIE}")
+        result = "#{@text_provider::GAME_OVER} #{@text_provider::TIE}"
       end
+      @io.display("\n#{result}\n")
     end
 
     private
 
-    def display_board(board)
+    def format_board(board)
+      output = "\n"
       rows = board.get_rows
-      @io.display ""
       rows.each.with_index do |row, i|
-        draw_row(row, board.size)
-        draw_spacer_row(row, board.size) unless i == rows.length - 1
+        output += format_row(row, board.size)
+        output += format_spacer_row(row, board.size) unless i == rows.length - 1
       end
+      output
     end
 
-    def draw_row(row, width)
+    def format_row(row, width)
       r = ""
       row.each.with_index do |p, i|
         r += " #{p} ".center(width)
         r += "|" unless i == row.length - 1
       end
-      @io.display(r)
+      r + "\n"
     end
 
-    def draw_spacer_row(row, width)
+    def format_spacer_row(row, width)
       spacers = (row.length * width) + (row.length - 1)
       spacer_row = ""
       spacers.times { spacer_row += "-" }
-      @io.display(spacer_row)
+      spacer_row + "\n"
     end
 
-    def display_message(game)
-      @io.display("#{@text_provider::GOOD_MOVE}") unless game.state == Game::Game::READY
+    def format_message(game)
+      game.state == Game::Game::READY ? "" : "\n#{@text_provider::GOOD_MOVE}\n"
     end
   end
 end

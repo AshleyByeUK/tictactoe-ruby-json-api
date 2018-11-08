@@ -68,24 +68,24 @@ module Game
       end
     end
 
-    # it "computes a move for an empty 3x3 board in no more than 200ms" do
-    #   game = Game.new(@players)
-    #   start = Time.now
-    #   game = game.make_move
-    #   finish = Time.now
-    #   duration_ms = ((finish - start) * 1000).to_i
-    #   expect(duration_ms).to be <= 200
-    #   expect(game.available_positions.length).to eq 8
-    # end
+    it "computes a move for an empty 3x3 board in no more than 200ms" do
+      game = Game.new(@players)
+      start = Time.now
+      game = game.make_move
+      finish = Time.now
+      duration_ms = ((finish - start) * 1000).to_i
+      expect(duration_ms).to be <= 200
+      expect(game.available_positions.length).to eq 8
+    end
 
-    # it "computes a move for an empty 4x4 board in no more than 200ms" do
-    #   game = Game.new(@players, board_size: 4)
-    #   start = Time.now
-    #   game = game.make_move
-    #   finish = Time.now
-    #   duration_ms = ((finish - start) * 1000).to_i
-    #   expect(duration_ms).to be <= 200
-    #   expect(game.available_positions.length).to eq 15
-    # end
+    it "computes a move for an empty 4x4 board in no more than 200ms" do
+      game = Game.new(@players, board_size: 4)
+      start = Time.now
+      game = game.make_move
+      finish = Time.now
+      duration_ms = ((finish - start) * 1000).to_i
+      expect(duration_ms).to be <= 200
+      expect(game.available_positions.length).to eq 15
+    end
   end
 end

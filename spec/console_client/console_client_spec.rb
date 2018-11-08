@@ -55,14 +55,12 @@ module ConsoleClient
           expect(@io.exit_called).to be true
         end
 
-        # About 2 sec...
-        #
-        # it "can play at different difficulties until a tie or win is achieved" do
-        #   @io.init('1', EASY, HARD, QUIT)
-        #   @client.start
-        #   expect(@io.gets_count).to eq 4
-        #   expect(@io.exit_called).to be true
-        # end
+        it "can play at different difficulties until a tie or win is achieved" do
+          @io.init('1', EASY, HARD, QUIT)
+          @client.start
+          expect(@io.gets_count).to eq 4
+          expect(@io.exit_called).to be true
+        end
       end
     end
   end

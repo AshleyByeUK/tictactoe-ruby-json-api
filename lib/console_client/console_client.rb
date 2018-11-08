@@ -31,7 +31,7 @@ module ConsoleClient
       @io.display(@text_provider::TITLE)
       @io.display(@text_provider::HELP)
       @io.display(@text_provider::MAIN_MENU)
-      case @io.get_input(['1', '2', '3'], @text_provider::INVALID_SELECTION)
+      case @io.get_validated_input(['1', '2', '3'], @text_provider::INVALID_SELECTION)
       when '1'
         play_game(3)
         display_return_to_main_menu
@@ -53,7 +53,7 @@ module ConsoleClient
     def configure_player(player, token, name)
       @io.clear_screen
       @io.display(@text_provider::PLAYER_TYPE)
-      case @io.get_input(['1', '2', '3'], @text_provider::INVALID_SELECTION)
+      case @io.get_validated_input(['1', '2', '3'], @text_provider::INVALID_SELECTION)
       when '1'
         Game::Player.create(:human, token, name)
       when '2'
@@ -65,7 +65,7 @@ module ConsoleClient
 
     def display_return_to_main_menu
       @io.display(@text_provider::RETURN_TO_MAIN_MENU)
-      continue = @io.get_input(['y', 'n'], @text_provider::INVALID_SELECTION)
+      continue = @io.get_validated_input(['y', 'n'], @text_provider::INVALID_SELECTION)
       continue == 'y' ? CONTINUE : EXIT
     end
 

@@ -13,7 +13,7 @@ module ConsoleClient
 
     def listen_for_user_input(game)
       prompt = "#{game.current_player_name} "
-      @io.get_input(game.available_positions, @text_provider::BAD_MOVE, prompt)
+      @io.get_validated_input(game.available_positions, @text_provider::BAD_MOVE, prompt)
     end
 
     def show_game_result(game)

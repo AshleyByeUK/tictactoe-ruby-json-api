@@ -3,7 +3,8 @@
 
 # TicTacToe (Ruby Edtion)
 
-The venerable game of TicTacToe, written in Ruby, otherwise known as noughts and crosses.
+The venerable game of TicTacToe, written in Ruby, otherwise known as noughts and crosses. Game player types
+include Human, Easy Computer and Hard Computer. Games can be played on either a 3x3 or a 4x4 board.
 
 ## Requirements
 
@@ -23,12 +24,6 @@ All of the following commands assume the current working directory is `tictactoe
 
 ## Playing
 
-Make sure that the game's entry point is executable:
-
-```
-chmod +x ./bin/tictactoe
-```
-
 Run the game (executable from anywhere - add the `bin` directory to your `PATH` if you want):
 
 ```
@@ -37,7 +32,7 @@ Run the game (executable from anywhere - add the `bin` directory to your `PATH` 
 
 ## Testing
 
-The tests can be run with `bundler`:
+Running the tests:
 
 ```
 bundle install
@@ -51,7 +46,7 @@ bundle install
 bundle exec rspec --format doc
 ```
 
-Once `rspec` has been run, you can view the code coverage report in your web browser:
+Once `rspec` has run, you can view the code coverage report in your web browser:
 
 ```
 open ./coverage/index.html

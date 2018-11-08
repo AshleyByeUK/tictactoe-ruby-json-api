@@ -35,6 +35,10 @@ module Game
       it "is equal to another board when all positions are the same" do
         expect(@board).to eq Board.new
       end
+
+      it "provides positions by row" do
+        expect(@board.get_rows.length).to eq 3
+      end
     end
 
     context "a 4x4 board" do

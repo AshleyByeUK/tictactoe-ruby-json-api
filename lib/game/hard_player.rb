@@ -7,7 +7,7 @@ module Game
       @name = name
     end
 
-    def make_move(game, ui = nil)
+    def get_move(game, ui = nil)
       find_best_move(game)
     end
 

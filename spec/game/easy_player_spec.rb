@@ -8,7 +8,7 @@ module Game
       board = Board.new(3, ['X', 'O', 'X', *3..8])
       game = Game.new(board)
       easy = EasyPlayer.new('O', 'Player 1')
-      move = easy.make_move(game)
+      move = easy.get_move(game)
       expect(game.available_positions).to include(move)
     end
   end

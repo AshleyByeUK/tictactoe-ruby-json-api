@@ -20,7 +20,7 @@ module Game
 
     def make_move(ui = nil)
       player = @players[@current_player - 1]
-      position = player.make_move(self, ui)
+      position = player.get_move(self, ui)
       place_token(position)
     end
 
@@ -52,10 +52,6 @@ module Game
 
     def tie?
       @rules.game_result(@board) == :tie
-    end
-
-    def last_player
-      swap_current_player
     end
 
     def current_player_name

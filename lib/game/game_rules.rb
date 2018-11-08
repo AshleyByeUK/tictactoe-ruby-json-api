@@ -13,15 +13,6 @@ module Game
     end
 
     def winner?(board, token)
-      # winner = false
-      # if win?(board)
-      #   board.possible_winning_positions.each do |combination|
-      #     winner = combination.uniq.length == 1 && combination.uniq[0] == token
-      #     break if winner
-      #   end
-      # end
-      # winner
-
       win?(board) && @winner == token
     end
 

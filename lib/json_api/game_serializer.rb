@@ -22,7 +22,7 @@ module JsonAPI
     end
 
     def serialize_game_over(serialized_game, game)
-      serialized_game[:result] = game.win? ? 'win' : 'tie'
+      serialized_game[:result] = game.win? ? "win" : "tie"
       serialized_game[:winner] = game.last_player_name if game.win?
       serialized_game
     end

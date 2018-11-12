@@ -7,7 +7,7 @@ module ConsoleClient
       "   | |  | | (__| | (_| | (__| | (_) |  __/ \n" +
       "   |_|  |_|\\___|_|\\__,_|\\___|_|\\___/ \\___| \n\n\n"
     HELP = "Type 'quit' or 'ctrl-c' to exit."
-    MAIN_MENU = "1. Play a game.\n2. Quit."
+    MAIN_MENU = "1. Play a game (3x3).\n2. Play a game (4x4).\n3. Quit."
     PLAYER_TYPE = "Choose a player type:\n\n1. Human.\n2. Easy computer.\n3. Hard computer."
     RETURN_TO_MAIN_MENU = "Return to main menu? (Y/N)"
     INVALID_SELECTION = 'That option was not recognised, please try again.'

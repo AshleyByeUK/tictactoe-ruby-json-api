@@ -9,7 +9,7 @@ module Game
 
       it "has 9 available positions" do
         expect(@board.positions).to eq [*1..9]
-        expect(@board.available_positions). to eq [*1..9]
+        expect(@board.available_positions).to eq [*1..9]
       end
 
       it "returns a new board after placing a token" do
@@ -34,6 +34,21 @@ module Game
 
       it "is equal to another board when all positions are the same" do
         expect(@board).to eq Board.new
+      end
+
+      it "provides positions by row" do
+        expect(@board.get_rows.length).to eq 3
+      end
+    end
+
+    context "a 4x4 board" do
+      before(:each) do
+        @board = Board.new(4)
+      end
+
+      it "has 16 available positions" do
+        expect(@board.positions).to eq [*1..16]
+        expect(@board.available_positions).to eq [*1..16]
       end
     end
   end

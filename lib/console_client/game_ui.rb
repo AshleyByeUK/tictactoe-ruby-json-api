@@ -6,46 +6,56 @@ module ConsoleClient
     end
 
     def show_game_state(game)
+      output = format_board(game.current_board) + format_message(game)
       @io.clear_screen
-      display_board(game.current_board)
-      display_game_state(game)
+      @io.display(output)
     end
 
     def listen_for_user_input(game)
       prompt = "#{game.current_player_name} "
-      @io.get_input(game.available_positions, @text_provider::BAD_MOVE, prompt)
+      @io.get_validated_input(game.available_positions, @text_provider::BAD_MOVE, prompt)
     end
 
     def show_game_result(game)
-      options = {player: game.last_player}
+      result = ""
       if game.win?
-        @io.display("#{@text_provider::GAME_OVER} #{game.last_player_name} #{@text_provider::WIN}")
+        result = "#{@text_provider::GAME_OVER} #{game.last_player_name} #{@text_provider::WIN}"
       else game.tie?
-        @io.display("#{@text_provider::GAME_OVER} #{@text_provider::TIE}")
+        result = "#{@text_provider::GAME_OVER} #{@text_provider::TIE}"
       end
+      @io.display("\n#{result}\n")
     end
 
     private
 
-    def display_board(board)
-      @io.display ""
-      draw_row(board[0], board[1], board[2])
-      draw_spacer_row
-      draw_row(board[3], board[4], board[5])
-      draw_spacer_row
-      draw_row(board[6], board[7], board[8])
+    def format_board(board)
+      output = "\n"
+      rows = board.get_rows
+      rows.each.with_index do |row, i|
+        output += format_row(row, board.size)
+        output += format_spacer_row(row, board.size) unless i == rows.length - 1
+      end
+      output
     end
 
-    def draw_row(a, b, c)
-      @io.display(" #{a} | #{b} | #{c} ")
+    def format_row(row, width)
+      r = ""
+      row.each.with_index do |p, i|
+        r += " #{p} ".center(width)
+        r += "|" unless i == row.length - 1
+      end
+      r + "\n"
     end
 
-    def draw_spacer_row
-      @io.display('-----------')
+    def format_spacer_row(row, width)
+      spacers = (row.length * width) + (row.length - 1)
+      spacer_row = ""
+      spacers.times { spacer_row += "-" }
+      spacer_row + "\n"
     end
 
-    def display_game_state(game)
-      @io.display("#{@text_provider::GOOD_MOVE}")
+    def format_message(game)
+      game.state == Game::Game::READY ? "" : "\n#{@text_provider::GOOD_MOVE}\n"
     end
   end
 end

@@ -18,7 +18,7 @@ module ConsoleClient
       @device.exit
     end
 
-    def get_input(valid_input, error_message = '', prompt = '')
+    def get_validated_input(valid_input, error_message = '', prompt = '')
       input = nil
       loop do
         display_prompt(prompt)

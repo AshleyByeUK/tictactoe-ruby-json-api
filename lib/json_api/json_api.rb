@@ -9,14 +9,27 @@ module JsonAPI
   class JsonAPI < Sinatra::Base
     register Sinatra::Namespace
 
+    def initialize
+      @player_deserializer = PlayerDeserializer.new
+      @game_serializer = GameSerializer.new
+    end
+
     namespace '/api/v1' do
-      post '/game/new' do
-        body = JSON.parse(request.body.read)
-        deserializer = PlayerDeserializer.new
-        players = deserializer.deserialize(body["players"])
-        game = Game::Game.new(players)
-        json GameSerializer.new.serialize(game)
+      new_game = lambda do
+        begin
+          players = @player_deserializer.deserialize(request_body["players"])
+          game = Game::Game.new(players)
+          json @game_serializer.serialize(game)
+        rescue
+          json "error" => "invalid players provided"
+        end
       end
+
+      post '/game/new', &new_game
+    end
+
+    def request_body
+      JSON.parse(request.body.read)
     end
   end
 end

@@ -1,9 +1,8 @@
 ENV['RACK_ENV'] = 'test'
 
-require 'json_api/json_api'
-require 'rspec'
 require 'rack/test'
 require 'json'
+require 'json_api/json_api'
 
 describe JsonAPI do
   include Rack::Test::Methods
@@ -53,6 +52,16 @@ describe JsonAPI do
   end
 
   context 'creating a new game' do
+    it 'returns an error when players are specified' do
+      post '/api/v1/game/new', '{}', { 'CONTENT_TYPE' => 'application/json' }
+
+      expect(last_response).to be_ok
+
+      response = JSON.parse(last_response.body)
+      expect(response).to have_key('error')
+      expect(response['error']).to eq "invalid players provided"
+    end
+
     it 'returns a game when players are specified' do
       post '/api/v1/game/new', @players, { 'CONTENT_TYPE' => 'application/json' }
 

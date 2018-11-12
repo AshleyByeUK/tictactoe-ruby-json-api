@@ -5,15 +5,16 @@ module Game
   class Game
     BAD_POSITION = :bad_position
     GAME_OVER = :game_over
-    OK = :ok
+    OK = :playing
     READY = :ready
 
-    attr_reader :current_player, :rules, :state, :players
+    attr_reader :board_size, :current_player, :rules, :state, :players
 
     def initialize(players, current_player: 1, board_size: 3, board: Board.new(board_size), state: READY)
       @players = players
       @current_player = current_player
       @board = board
+      @board_size = board_size
       @state = state
       @rules = GameRules.new(@board)
     end

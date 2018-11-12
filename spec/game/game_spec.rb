@@ -30,7 +30,7 @@ module Game
       game = Game.new([player_one, player_two])
       updated_game = game.make_move(ConsoleClient::MockGameUI.new)
       expect(updated_game.object_id).not_to eq game.object_id
-      expect(updated_game.state).to eq :ok
+      expect(updated_game.state).to eq :playing
       expect(updated_game.current_board).to eq Board.new(3, ['X', *2..9])
       expect(updated_game.available_positions).to eq [*2..9]
     end

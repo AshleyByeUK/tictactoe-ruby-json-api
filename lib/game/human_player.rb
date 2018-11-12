@@ -1,10 +1,11 @@
 module Game
   class HumanPlayer
-    attr_reader :name, :token
+    attr_reader :name, :token, :type
 
     def initialize(token, name)
       @token = token
       @name = name
+      @type = :human
     end
 
     def get_move(game, ui)

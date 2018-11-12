@@ -54,7 +54,7 @@ describe JsonAPI do
 
   context 'creating a new game' do
     it 'returns a game when players are specified' do
-      post '/', @players, { 'CONTENT_TYPE' => 'application/json' }
+      post '/api/v1/game/new', @players, { 'CONTENT_TYPE' => 'application/json' }
 
       expect(last_response).to be_ok
 

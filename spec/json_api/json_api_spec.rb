@@ -153,12 +153,10 @@ describe JsonAPI do
       serialized_game = '{
         "game": {
           "available_positions": [6, 7, 8, 9],
-          "board": ["X", "X", "X", "O", "O", 6, 7, 8, 9],
+          "board": ["X", "X", 3, "O", "O", 6, 7, 8, 9],
           "board_size": 3,
-          "current_player": 2,
-          "state": "playing",
-          "result": "win",
-          "winner": "Player 1"
+          "current_player": 1,
+          "state": "playing"
         },
         "players": {
           "player_one": {

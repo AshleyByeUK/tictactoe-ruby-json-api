@@ -11,9 +11,13 @@ module ConsoleClient
       @io.display(output)
     end
 
-    def listen_for_user_input(game)
-      prompt = "#{game.current_player_name} "
-      @io.get_validated_input(game.available_positions, @text_provider::BAD_MOVE, prompt)
+    def get_move(game)
+      @io.display("#{game.current_player_name} > ")
+      @io.get_input
+    end
+
+    def show_invalid_position_message
+      @io.display(@text_provider::BAD_MOVE)
     end
 
     def show_game_result(game)

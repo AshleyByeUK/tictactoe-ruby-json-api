@@ -9,7 +9,7 @@ module Game
     end
 
     def get_move(game, ui)
-      ui.listen_for_user_input(game).to_i
+      ui.get_move(game).to_i
     end
   end
 end

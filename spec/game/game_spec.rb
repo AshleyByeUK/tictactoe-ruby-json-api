@@ -41,8 +41,8 @@ module Game
       player_two = MockPlayer.new('O', [1])
       game = Game.new([player_one, player_two])
           .make_move(game_ui)
-          .make_move(game_ui)
-      expect(game.state).to eq :bad_position
+      expect { game.make_move(game_ui) }.to raise_error(InvalidPositionError, "invalid position")
+      expect(game.state).to eq :playing
       expect(game.current_board).to eq Board.new(3, ['X', *2..9])
       expect(game.available_positions).to eq [*2..9]
     end
@@ -52,8 +52,8 @@ module Game
         player_one = MockPlayer.new('X', [position])
         player_two = MockPlayer.new('O')
         game = Game.new([player_one, player_two])
-            .make_move(ConsoleClient::MockGameUI.new)
-        expect(game.state).to eq :bad_position
+        expect { game.make_move(ConsoleClient::MockGameUI.new) }.to raise_error(InvalidPositionError, "invalid position")
+        expect(game.state).to eq :ready
       end
     end
 
@@ -91,7 +91,7 @@ module Game
       player_one = MockPlayer.new('X', ["BAD"])
       player_two = MockPlayer.new('O')
       game = Game.new([player_one, player_two])
-          .make_move(game_ui)
+      expect { game.make_move(game_ui) }.to raise_error(InvalidPositionError, "invalid position")
       expect(game.current_player).to be 1
     end
 

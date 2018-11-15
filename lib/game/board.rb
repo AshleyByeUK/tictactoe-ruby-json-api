@@ -12,8 +12,9 @@ module Game
     end
 
     def place_token(position, token)
+      raise InvalidPositionError if !available_positions.include?(position)
       positions = Array.new(@positions)
-      positions[position - 1] = token if available_positions.include?(position)
+      positions[position - 1] = token
       Board.new(@size, positions)
     end
 

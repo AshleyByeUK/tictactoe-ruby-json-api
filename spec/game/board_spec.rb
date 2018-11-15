@@ -27,7 +27,8 @@ module Game
 
       it "does not allow a token to be placed over an existing token" do
         board = @board.place_token(1, 'X')
-                      .place_token(1, 'O')
+
+        expect { board.place_token(1, 'O') }.to raise_error(InvalidPositionError, "invalid position")
         expect(board.positions).to eq ['X', *2..9]
         expect(board.available_positions).to eq [*2..9]
       end

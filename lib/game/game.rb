@@ -3,7 +3,6 @@ require 'game/game_rules'
 
 module Game
   class Game
-    BAD_POSITION = :bad_position
     GAME_OVER = :game_over
     OK = :playing
     READY = :ready
@@ -23,16 +22,6 @@ module Game
       player = @players[@current_player - 1]
       position = player.get_move(self, ui)
       place_token(position)
-    end
-
-    def place_token(position)
-      board = @board.place_token(position, @players[@current_player - 1].token)
-      if board != @board
-        state = @rules.game_result(board) == :playing ? OK : GAME_OVER
-        Game.new(@players, current_player: swap_current_player, board: board, state: state)
-      else
-        Game.new(@players, current_player: @current_player, board: board, state: BAD_POSITION)
-      end
     end
 
     def current_board
@@ -59,6 +48,10 @@ module Game
       @players[@current_player - 1].name
     end
 
+    def current_player_token
+      @players[@current_player - 1].token
+    end
+
     def last_player_name
       @players[swap_current_player - 1].name
     end
@@ -68,6 +61,12 @@ module Game
     end
 
     private
+
+    def place_token(position)
+      board = @board.place_token(position, current_player_token)
+      state = @rules.game_result(board) == :playing ? OK : GAME_OVER
+      Game.new(@players, current_player: swap_current_player, board: board, state: state)
+    end
 
     def swap_current_player
       @current_player == 1 ? 2 : 1

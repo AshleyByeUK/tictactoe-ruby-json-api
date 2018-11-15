@@ -3,14 +3,10 @@ require 'game/game'
 module JsonAPI
   class GameSerializer
     def serialize(game)
-      unless game.state == Game::Game::BAD_POSITION
-        {
-          game: serialize_game(game),
-          players: serialize_players(game.players)
-        }
-      else
-        {"error": "move position not provided"}
-      end
+      {
+        game: serialize_game(game),
+        players: serialize_players(game.players)
+      }
     end
 
     private

@@ -70,9 +70,8 @@ module JsonAPI
     it 'serializes a won game' do
       p1 = Game::Player.create(:human, 'X', 'Player 1')
       p2 = Game::Player.create(:human, 'O', 'Player 2')
-      board = Game::Board.new(3, ['X', 'X', 3, 'O', 'O', 6, 7, 8, 9])
-      game = Game::Game.new([p1, p2], current_player: 1, board_size: 3, board: board, state: :playing)
-      game = game.place_token(3)
+      board = Game::Board.new(3, ['X', 'X', 'X', 'O', 'O', 6, 7, 8, 9])
+      game = Game::Game.new([p1, p2], current_player: 2, board_size: 3, board: board, state: :game_over)
 
       serializer = GameSerializer.new
       serialized_game = serializer.serialize(game)

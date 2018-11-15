@@ -3,286 +3,190 @@ ENV['RACK_ENV'] = 'test'
 require 'rack/test'
 require 'json'
 require 'json_api/json_api'
+require 'json_api/json_requests'
 
-describe JsonAPI do
-  include Rack::Test::Methods
+module JsonAPI
+  describe JsonAPI do
+    include JsonRequests
+    include Rack::Test::Methods
 
-  def app
-    JsonAPI::JsonAPI.new
-  end
-
-  context 'creating a new game' do
-    it 'returns an error when players are specified' do
-      post '/api/v1/game/new', '{}', { 'CONTENT_TYPE' => 'application/json' }
-
-      expect(last_response).to be_ok
-
-      response = JSON.parse(last_response.body)
-      expect(response).to have_key('error')
-      expect(response['error']).to eq "invalid players provided"
+    def app
+      JsonAPI.new
     end
 
-    it 'returns a game when players are specified' do
-      players = '{
-        "players": {
-          "player_one": {
-            "name": "Player 1",
-            "token": "X",
-            "type": "human"
-          },
-          "player_two": {
-            "name": "Player 2",
-            "token": "O",
-            "type": "human"
-          }
-        }
-      }'
+    context 'creating a new game' do
+      it 'returns an error when no players are specified' do
+        post '/api/v1/game/new', JsonRequests.empty_json_object
 
-      post '/api/v1/game/new', players, { 'CONTENT_TYPE' => 'application/json' }
+        expect(last_response).to be_ok
 
-      expect(last_response).to be_ok
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "a player is missing"
+      end
 
-      response = JSON.parse(last_response.body)
-      expect(response).to have_key('game')
+      it 'returns an error when one player is specified' do
+        post '/api/v1/game/new', JsonRequests.invalid_new_game_only_one_player
+
+        expect(last_response).to be_ok
+
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "a player is missing"
+      end
+
+      it 'returns an error when a player is specified with missing information' do
+        post '/api/v1/game/new', JsonRequests.invalid_new_game_missing_player_info
+
+        expect(last_response).to be_ok
+
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "player is invalid"
+      end
+
+      it 'returns a game when players are specified' do
+        post '/api/v1/game/new', JsonRequests.valid_new_game
+
+        expect(last_response).to be_ok
+
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('game')
+      end
+
+      it 'creates a game with a board size of 4' do
+        post '/api/v1/game/new', JsonRequests.valid_new_game_board_size_4
+
+        expect(last_response).to be_ok
+
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('game')
+        expect(response['game']).to have_key('board_size')
+        expect(response['game']['board_size']).to eq 4
+      end
     end
 
-    it 'creates a game with a board size of 4' do
-      players = '{
-        "game": {
-          "board_size": 4
-        },
-        "players": {
-          "player_one": {
-            "name": "Player 1",
-            "token": "X",
-            "type": "human"
-          },
-          "player_two": {
-            "name": "Player 2",
-            "token": "O",
-            "type": "human"
-          }
-        }
-      }'
+    context 'playing a game' do
+      it 'returns an error when nothing is specified' do
+        post '/api/v1/game/play', JsonRequests.empty_json_object
 
-      post '/api/v1/game/new', players, { 'CONTENT_TYPE' => 'application/json' }
+        expect(last_response).to be_ok
 
-      expect(last_response).to be_ok
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "game is missing"
+      end
 
-      response = JSON.parse(last_response.body)
-      expect(response).to have_key('game')
-      expect(response['game']).to have_key('board_size')
-      expect(response['game']['board_size']).to eq 4
-    end
-  end
+      it 'does not make a human player move when the game is over' do
+        post '/api/v1/game/play', JsonRequests.valid_human_game_is_over
 
-  context 'playing a game' do
-    it 'does not make a human player move when the game is over' do
-      serialized_game = '{
-        "game": {
-          "available_positions": [6, 7, 8, 9],
-          "board": ["X", "X", "X", "O", "O", 6, 7, 8, 9],
-          "board_size": 3,
-          "current_player": 2,
-          "state": "playing",
-          "result": "win",
-          "winner": "Player 1"
-        },
-        "move": {
-          "position": 6
-        },
-        "players": {
-          "player_one": {
-              "name": "Player 1",
-              "token": "X",
-              "type": "human"
-          },
-          "player_two": {
-              "name": "Player 2",
-              "token": "O",
-              "type": "human"
-          }
-        }
-      }'
+        expect(last_response).to be_ok
 
-      post '/api/v1/game/play', serialized_game, { 'CONTENT_TYPE' => 'application/json' }
+        response = JSON.parse(last_response.body)
+        expect(response['game']['board']).to eq ["X", "X", "X", "X", "O", "O", "O", 8, 9, 10, 11, 12, 13, 14, 15, 16]
+        expect(response['game']['result']).to eq 'win'
+        expect(response['game']['winner']).to eq 'Player 1'
+      end
 
-      expect(last_response).to be_ok
+      it 'does not make a computer player move when the game is over' do
+        post '/api/v1/game/play', JsonRequests.valid_computer_game_is_over
 
-      response = JSON.parse(last_response.body)
-      expect(response['game']['board']).to eq ["X", "X", "X", "O", "O", 6, 7, 8, 9]
-    end
+        expect(last_response).to be_ok
 
-    it 'does not make a computer player move when the game is over' do
-      serialized_game = '{
-        "game": {
-          "available_positions": [6, 7, 8, 9],
-          "board": ["X", "X", "X", "O", "O", 6, 7, 8, 9],
-          "board_size": 3,
-          "current_player": 2,
-          "state": "playing",
-          "result": "win",
-          "winner": "Player 1"
-        },
-        "move": {
-          "position": 6
-        },
-        "players": {
-          "player_one": {
-              "name": "Player 1",
-              "token": "X",
-              "type": "easy"
-          },
-          "player_two": {
-              "name": "Player 2",
-              "token": "O",
-              "type": "easy"
-          }
-        }
-      }'
+        response = JSON.parse(last_response.body)
+        expect(response['game']['board']).to eq ["X", "X", "X", "O", "O", 6, 7, 8, 9]
+      end
 
-      post '/api/v1/game/play', serialized_game, { 'CONTENT_TYPE' => 'application/json' }
+      it 'returns an error when no players are specified' do
+        post '/api/v1/game/play', JsonRequests.invalid_game_no_players
 
-      expect(last_response).to be_ok
+        expect(last_response).to be_ok
 
-      response = JSON.parse(last_response.body)
-      expect(response['game']['board']).to eq ["X", "X", "X", "O", "O", 6, 7, 8, 9]
-    end
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "a player is missing"
+      end
 
-    it 'returns an error when no move is specified for human player' do
-      serialized_game = '{
-        "game": {
-          "available_positions": [6, 7, 8, 9],
-          "board": ["X", "X", 3, "O", "O", 6, 7, 8, 9],
-          "board_size": 3,
-          "current_player": 1,
-          "state": "playing"
-        },
-        "players": {
-          "player_one": {
-              "name": "Player 1",
-              "token": "X",
-              "type": "human"
-          },
-          "player_two": {
-              "name": "Player 2",
-              "token": "O",
-              "type": "human"
-          }
-        }
-      }'
+      it 'returns an error when no move is specified for human player' do
+        post '/api/v1/game/play', JsonRequests.invalid_game_no_human_move_given
 
-      post '/api/v1/game/play', serialized_game, { 'CONTENT_TYPE' => 'application/json' }
+        expect(last_response).to be_ok
 
-      expect(last_response).to be_ok
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "missing player's move"
+      end
 
-      response = JSON.parse(last_response.body)
-      expect(response).to have_key('error')
-      expect(response['error']).to eq "move position not provided"
-    end
+      it 'returns an error when an invalid move is specified for human player' do
+        post '/api/v1/game/play', JsonRequests.invalid_game_invalid_move_given
 
-    it 'plays a move when the player is a computer' do
-      serialized_game = '{
-        "game": {
-          "available_positions": [2, 6, 7, 8, 9],
-          "board": ["X", 2, "X", "O", "O", 6, 7, 8, 9],
-          "board_size": 3,
-          "current_player": 1,
-          "state": "playing"
-        },
-        "players": {
-          "player_one": {
-              "name": "Player 1",
-              "token": "X",
-              "type": "easy"
-          },
-          "player_two": {
-              "name": "Player 2",
-              "token": "O",
-              "type": "hard"
-          }
-        }
-      }'
+        expect(last_response).to be_ok
 
-      post '/api/v1/game/play', serialized_game, { 'CONTENT_TYPE' => 'application/json' }
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "invalid position"
+      end
 
-      expect(last_response).to be_ok
+      it 'plays a move when the player is a computer' do
+        post '/api/v1/game/play', JsonRequests.valid_game_computers_move
 
-      response = JSON.parse(last_response.body)
-      expect(response['game']['board']).not_to eq ["X", 2, "X", "O", "O", 6, 7, 8, 9]
-      expect(response['game']['current_player']).to eq 2
-    end
+        expect(last_response).to be_ok
 
-    it 'returns an error when incorrect game information is provided' do
-      serialized_game = '{
-        "game": {
-          "available_positions": [6, 7, 8, 9],
-          "board_size": 3,
-          "current_player": 2,
-          "state": "playing",
-          "result": "win",
-          "winner": "Player 1"
-        },
-        "move": {
-          "position": 6
-        },
-        "players": {
-          "player_one": {
-              "name": "Player 1",
-              "token": "X",
-              "type": "human"
-          },
-          "player_two": {
-              "name": "Player 2",
-              "token": "O",
-              "type": "human"
-          }
-        }
-      }'
+        response = JSON.parse(last_response.body)
+        expect(response['game']['board']).not_to eq ["X", 2, "X", "O", "O", 6, 7, 8, 9]
+        expect(response['game']['current_player']).to eq 2
+      end
 
-      post '/api/v1/game/play', serialized_game, { 'CONTENT_TYPE' => 'application/json' }
+      it 'returns an error when no game information is provided' do
+        post '/api/v1/game/play', JsonRequests.invalid_game_missing_game_info
 
-      expect(last_response).to be_ok
+        expect(last_response).to be_ok
 
-      response = JSON.parse(last_response.body)
-      expect(response).to have_key('error')
-      expect(response['error']).to eq "invalid game or players"
-    end
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "game is missing"
+      end
 
-    it 'plays a move when valid position is provided' do
-      serialized_game = '{
-        "game": {
-          "available_positions": [2, 6, 7, 8, 9],
-          "board": ["X", 2, "X", "O", "O", 6, 7, 8, 9],
-          "board_size": 3,
-          "current_player": 1,
-          "state": "playing"
-        },
-        "move": {
-          "position": 2
-        },
-        "players": {
-          "player_one": {
-              "name": "Player 1",
-              "token": "X",
-              "type": "human"
-          },
-          "player_two": {
-              "name": "Player 2",
-              "token": "O",
-              "type": "human"
-          }
-        }
-      }'
+      it 'returns an error when no board is provided' do
+        post '/api/v1/game/play', JsonRequests.invalid_game_missing_board
 
-      post '/api/v1/game/play', serialized_game, { 'CONTENT_TYPE' => 'application/json' }
+        expect(last_response).to be_ok
 
-      expect(last_response).to be_ok
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "board is missing"
+      end
 
-      response = JSON.parse(last_response.body)
-      expect(response['game']['board']).to eq ["X", "X", "X", "O", "O", 6, 7, 8, 9]
-      expect(response['game']['result']).to eq "win"
-      expect(response['game']['winner']).to eq "Player 1"
+      it 'returns an error when no current player is provided' do
+        post '/api/v1/game/play', JsonRequests.invalid_game_missing_current_player
+
+        expect(last_response).to be_ok
+
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "current player is missing"
+      end
+
+      it 'returns an error when no state is provided' do
+        post '/api/v1/game/play', JsonRequests.invalid_game_missing_state
+
+        expect(last_response).to be_ok
+
+        response = JSON.parse(last_response.body)
+        expect(response).to have_key('error')
+        expect(response['error']).to eq "state is missing"
+      end
+
+      it 'plays a move when valid position is provided' do
+        post '/api/v1/game/play', JsonRequests.valid_game_human_move
+
+        expect(last_response).to be_ok
+
+        response = JSON.parse(last_response.body)
+        expect(response['game']['board']).to eq ["X", "X", "X", "O", "O", 6, 7, 8, 9]
+        expect(response['game']['result']).to eq "win"
+        expect(response['game']['winner']).to eq "Player 1"
+      end
     end
   end
 end

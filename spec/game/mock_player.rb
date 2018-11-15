@@ -8,7 +8,7 @@ module Game
     end
 
     def get_move(game, ui)
-      ui.listen_for_user_input(game)
+      ui.get_move(game)
       @moves.pop
     end
 

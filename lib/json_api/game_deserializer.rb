@@ -30,15 +30,15 @@ module JsonAPI
     end
 
     def missing_board?(game)
-      !game.has_key?('board') || game['board'] == nil
+      !(game.has_key?('board') && game['board'] != nil)
     end
 
     def missing_current_player?(game)
-      !game.has_key?('current_player') || game['current_player'] == nil
+      !(game.has_key?('current_player') && game['current_player'] != nil)
     end
 
     def missing_state?(game)
-      !game.has_key?('state') || game['state'] == nil
+      !(game.has_key?('state') && game['state'] != nil)
     end
 
     def deserialize_game(game)

@@ -1,9 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'rspec', '~> 3.8.0', require: false, group: :test
-gem 'simplecov', require: false, group: :test
-gem 'codecov', require: false, group: :test
-gem 'rack-test', require: false, group: :test
+group :test do
+  gem 'rspec', '~> 3.8.0', require: false
+  gem 'simplecov', require: false
+  gem 'codecov', require: false
+  gem 'rack-test', require: false
+end
 
 gem 'sinatra'
 gem 'sinatra-contrib'
+gem 'sinatra-cors', '1.1.0'

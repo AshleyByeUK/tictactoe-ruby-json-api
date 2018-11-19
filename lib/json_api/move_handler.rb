@@ -12,9 +12,9 @@ module JsonAPI
     private
 
     def missing_move?
-      !@request.has_key?('move') ||
-        !@request['move'].has_key?('position') ||
-        !@request.dig('move', 'position') == nil
+      !(@request.has_key?('move') &&
+        @request['move'].has_key?('position') &&
+        @request.dig('move', 'position') != nil)
     end
   end
 end

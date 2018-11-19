@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'sinatra/cors'
 require 'sinatra/json'
 require 'sinatra/namespace'
 require 'json_api/request_handler'
@@ -6,6 +7,11 @@ require 'json_api/request_handler'
 module JsonAPI
   class JsonAPI < Sinatra::Base
     register Sinatra::Namespace
+    register Sinatra::Cors
+
+    set :allow_origin, "*"
+    set :allow_methods, "POST"
+    set :allow_headers, "content-type"
 
     def initialize
       super

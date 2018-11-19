@@ -26,19 +26,16 @@ module Game
 
     def play_a_turn(game)
       loop do
-        made_successful_move, game = make_move(game)
-        break if made_successful_move
+        updated_game = make_move(game)
+        return updated_game if updated_game != game
       end
-      game
     end
 
     def make_move(game)
-      begin
-        [true, game.make_move(@ui)]
+      game.make_move(@ui)
       rescue InvalidPositionError
         @ui.show_invalid_position_message
-        [false, game]
-      end
+        game
     end
   end
 end

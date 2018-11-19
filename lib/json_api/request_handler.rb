@@ -15,23 +15,19 @@ module JsonAPI
     end
 
     def handle_new_game
-      begin
-        new_game
+      new_game
       rescue DeserializationError => message
-        {"error" => message}
+        error(message)
       rescue Exception
-        {"error" => "an unknown error occurred"}
-      end
+        unknown_error
     end
 
     def handle_play_game
-      begin
-        play_move
+      play_move
       rescue DeserializationError, Game::InvalidPositionError => message
-        {"error" => message}
+        error(message)
       rescue Exception
-        {"error" => "an unknown error occured"}
-      end
+        unknown_error
     end
 
     private
@@ -51,6 +47,14 @@ module JsonAPI
 
     def board_size_or(default)
       @request.dig('game', 'board_size') == nil ? default : @request.dig('game', 'board_size')
+    end
+
+    def error(message)
+      {"error" => message}
+    end
+
+    def unknown_error
+      error("an unknown error occurred")
     end
   end
 end

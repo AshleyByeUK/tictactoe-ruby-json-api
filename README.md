@@ -27,7 +27,15 @@ All of the following commands assume the current working directory is `tictactoe
 Run the game (executable from anywhere - add the `bin` directory to your `PATH` if you want):
 
 ```
-./bin/tictactoe
+bin/tictactoe
+```
+
+## JSON API
+
+To run the JSON API, execute:
+
+```
+bundle exec rackup
 ```
 
 ## Testing

@@ -1,10 +1,11 @@
 module Game
   class HardPlayer
-    attr_reader :name, :token
+    attr_reader :name, :token, :type
 
     def initialize(token, name)
       @token = token
       @name = name
+      @type = :hard
     end
 
     def get_move(game, ui = nil)

@@ -27,11 +27,10 @@ module ConsoleClient
     private
 
     def main_menu
+      main_menu = @text_provider::TITLE + @text_provider::HELP + "\n" + @text_provider::MAIN_MENU + "\n: "
       @io.clear_screen
-      @io.display(@text_provider::TITLE)
-      @io.display(@text_provider::HELP)
-      @io.display(@text_provider::MAIN_MENU)
-      case @io.get_validated_input(['1', '2', '3'], @text_provider::INVALID_SELECTION)
+      @io.display(main_menu)
+      case get_validated_input(['1', '2', '3'], @text_provider::INVALID_SELECTION)
       when '1'
         play_game(3)
         return_to_main_menu?
@@ -52,8 +51,8 @@ module ConsoleClient
 
     def configure_player(player, token, name)
       @io.clear_screen
-      @io.display(@text_provider::PLAYER_TYPE)
-      case @io.get_validated_input(['1', '2', '3'], @text_provider::INVALID_SELECTION)
+      @io.display(@text_provider::PLAYER_TYPE + "\n: ")
+      case get_validated_input(['1', '2', '3'], @text_provider::INVALID_SELECTION)
       when '1'
         Game::Player.create(:human, token, name)
       when '2'
@@ -64,14 +63,23 @@ module ConsoleClient
     end
 
     def return_to_main_menu?
-      @io.display(@text_provider::RETURN_TO_MAIN_MENU)
-      continue = @io.get_validated_input(['y', 'n'], @text_provider::INVALID_SELECTION)
-      continue == 'y' ? CONTINUE : EXIT
+      @io.display(@text_provider::RETURN_TO_MAIN_MENU + "\n: ")
+      @io.get_input == 'y' ? CONTINUE : EXIT
     end
 
     def quit_console
       @io.display(@text_provider::QUIT)
       @io.exit
+    end
+
+    def get_validated_input(valid_input, error_message)
+      valid = false
+      while !valid
+        input = @io.get_input
+        valid = valid_input.include?(input)
+        @io.display(error_message + "\n: ") if !valid
+      end
+      input
     end
   end
 end

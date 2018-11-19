@@ -14,7 +14,7 @@ module Game
       p2 = MockPlayer.new('O', 4, 5)
       @engine.start(p1, p2)
       expect(@ui.show_game_state_called).to eq 6
-      expect(@ui.listen_for_user_input_called).to eq 5
+      expect(@ui.get_move_called).to eq 5
       expect(@ui.show_game_result_called). to eq 1
     end
 
@@ -23,7 +23,7 @@ module Game
       p2 = MockPlayer.new('O', 1, 7, 6, 8)
       @engine.start(p1, p2)
       expect(@ui.show_game_state_called).to eq 10
-      expect(@ui.listen_for_user_input_called).to eq 9
+      expect(@ui.get_move_called).to eq 9
       expect(@ui.show_game_result_called). to eq 1
     end
 
@@ -33,7 +33,17 @@ module Game
       @engine = GameEngine.new(@ui, 4)
       @engine.start(p1, p2)
       expect(@ui.show_game_state_called).to eq 8
-      expect(@ui.listen_for_user_input_called).to eq 7
+      expect(@ui.get_move_called).to eq 7
+      expect(@ui.show_game_result_called). to eq 1
+    end
+
+    it "does not change player until a valid move has been made" do
+      p1 = MockPlayer.new('X', 1, 4, 2, 3)
+      p2 = MockPlayer.new('O', 4, 5)
+      @engine.start(p1, p2)
+      expect(@ui.show_game_state_called).to eq 6
+      expect(@ui.get_move_called).to eq 6
+      expect(@ui.show_invalid_position_message_called).to eq 1
       expect(@ui.show_game_result_called). to eq 1
     end
   end

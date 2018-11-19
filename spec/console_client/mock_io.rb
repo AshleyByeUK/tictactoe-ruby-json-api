@@ -14,7 +14,7 @@ module ConsoleClient
       @exit_called = false
     end
 
-    def get_validated_input(valid_input, error_message = '', prompt = '')
+    def get_input(prompt = '')
       @gets_count += 1
       @device.gets.strip.downcase
     end

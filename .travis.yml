@@ -1,7 +1,15 @@
 language: ruby
 rvm:
-  - 2.5.2
-install: bundle install
+- 2.5.2
+install:
+- gem install bundler
+- bundle install
 script:
-  - gem install bundler
-  - bundle exec rspec --format doc
+- bundle exec rspec --format doc
+deploy:
+  provider: heroku
+  app:
+    master: ruby-tictactoe-api
+  api_key:
+    master:
+      secure: gQg4UqFmrTW+Gstq27AcCwm1+iqMZnZoF5tX3txdS0pdydPC4i7ekUi8EzQV9nYJEUdLkozLKzL0nq2WjqgiioyCagH1ybzOX0nY0MqzLbLkQdLa/cnFhRLbmelrJYumuciOQPPMzFnzouj3xohTQuv3uK6FAnKJNrmtvXUnAk1yyuLu0H104aTLadwKR6We8dPP9DU4tGIjZjahx3YeUszPns9Q8b4G+n6oEb8XfzG/W41tfk+ahyoH/50KvwlMHEoNBKEft37C8gjcjgmSmWWEW9dqEPf4TUUnXQBZ2hZ0JxnSkEuArk8a+DAwiX7/kmaEBp0oBOOAyuEJKic3UGIZQO94PXFzxQUp7hyAbdnUsl5YRfZkFVQoG+fu6KCSnA7UvUSg3Y537YI2VLiA3vwXnvY7+q93msVczN2rLIYoC3LYZL/EKN8u19huQG1MmXhFnH+9/YPTIVa0n14db7a9PD3WOqLuA7evvNsfOVtpO4c299FdVXIrpHPAHA0pe4eh+vK8BRGw8gQB6VfCy3FtqNF/CmmIJlNw1uJ3zbYpdGIssfANJxxaWqMRkscMcGOM5LPrgjcIT2kuPbITnGqZ2s9dJGEH8pyFNUKtmigukljofbGHKmRmhhYmSNNGkCTkp2ej+axPFUuSA04SMArXGyon8J5ADhuPzztcKBQ=

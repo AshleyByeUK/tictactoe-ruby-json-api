@@ -1,4 +1,4 @@
-require 'game/game'
+require 'tictactoe/game'
 
 module JsonAPI
   class GameSerializer

@@ -1,4 +1,4 @@
-require 'game/errors'
+require 'tictactoe/errors'
 require 'json_api/errors'
 require 'json_api/game_deserializer'
 require 'json_api/game_serializer'
@@ -24,7 +24,7 @@ module JsonAPI
 
     def handle_play_game
       play_move
-      rescue DeserializationError, Game::InvalidPositionError => message
+      rescue DeserializationError, TicTacToe::InvalidPositionError => message
         error(message)
       rescue Exception
         unknown_error
@@ -34,7 +34,7 @@ module JsonAPI
 
     def new_game
       players = @player_deserializer.deserialize(@request)
-      game = Game::Game.new(players, board_size: board_size_or(3))
+      game = TicTacToe::Game.new(players, board_size: board_size_or(3))
       @game_serializer.serialize(game)
     end
 

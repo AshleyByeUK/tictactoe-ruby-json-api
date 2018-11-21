@@ -1,10 +1,9 @@
-[![Build Status](https://travis-ci.org/AshleyByeUK/tictactoe-ruby.svg?branch=master)](https://travis-ci.org/AshleyByeUK/tictactoe-ruby)
-[![codecov](https://codecov.io/gh/AshleyByeUK/tictactoe-ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/AshleyByeUK/tictactoe-ruby)
+[![Build Status](https://travis-ci.org/AshleyByeUK/tictactoe-ruby-json-api.svg?branch=master)](https://travis-ci.org/AshleyByeUK/tictactoe-ruby-json-api)
+[![codecov](https://codecov.io/gh/AshleyByeUK/tictactoe-ruby-json-api/branch/master/graph/badge.svg)](https://codecov.io/gh/AshleyByeUK/tictactoe-ruby-json-api)
 
-# TicTacToe (Ruby Edtion)
+# tictactoe-ruby-json-api
 
-The venerable game of TicTacToe, written in Ruby, otherwise known as noughts and crosses. Game player types
-include Human, Easy Computer and Hard Computer. Games can be played on either a 3x3 or a 4x4 board.
+A JSON API for the game of [TictacToe](https://github.com/AshleyByeUK/tictactoe-ruby-core).
 
 ## Requirements
 
@@ -16,19 +15,12 @@ has only been carried out on macOS.
 To download the source, clone the repository:
 
 ```
-git clone git@github.com:AshleyByeUK/tictactoe-ruby.git
-cd tictactoe-ruby
+git clone git@github.com:AshleyByeUK/tictactoe-ruby-json-api.git
+cd tictactoe-ruby-json-api
+bundle install
 ```
 
-All of the following commands assume the current working directory is `tictactoe-ruby`.
-
-## Playing
-
-Run the game (executable from anywhere - add the `bin` directory to your `PATH` if you want):
-
-```
-bin/tictactoe
-```
+All of the following commands assume the current working directory is `tictactoe-ruby-json-api`.
 
 ## JSON API
 
@@ -43,14 +35,12 @@ bundle exec rackup
 Running the tests:
 
 ```
-bundle install
 bundle exec rspec
 ```
 
 Or:
 
 ```
-bundle install
 bundle exec rspec --format doc
 ```
 

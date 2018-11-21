@@ -1,6 +1,6 @@
-require 'game/board'
-require 'game/game'
-require 'game/player'
+require 'tictactoe/board'
+require 'tictactoe/game'
+require 'tictactoe/player'
 require 'json_api/errors'
 require 'json_api/player_deserializer'
 
@@ -13,7 +13,7 @@ module JsonAPI
     def deserialize(request_body)
       raise_error_if_invalid(request_body)
       players = @player_deserializer.deserialize(request_body)
-      Game::Game.new(players, deserialize_game(request_body['game']))
+      TicTacToe::Game.new(players, deserialize_game(request_body['game']))
     end
 
     private
@@ -60,7 +60,7 @@ module JsonAPI
 
     def deserialize_board(game)
       size = deserialize_board_size(game)
-      Game::Board.new(size, game['board'])
+      TicTacToe::Board.new(size, game['board'])
     end
 
     def deserialize_state(game)

@@ -1,14 +1,14 @@
-require 'game/board'
-require 'game/game'
-require 'game/player'
+require 'tictactoe/board'
+require 'tictactoe/game'
+require 'tictactoe/player'
 require 'json_api/game_serializer'
 
 module JsonAPI
   describe GameSerializer do
     it 'serializes a new game' do
-      p1 = Game::Player.create(:human, 'X', 'Player 1')
-      p2 = Game::Player.create(:human, 'O', 'Player 2')
-      game = Game::Game.new([p1, p2])
+      p1 = TicTacToe::Player.create(:human, 'X', 'Player 1')
+      p2 = TicTacToe::Player.create(:human, 'O', 'Player 2')
+      game = TicTacToe::Game.new([p1, p2])
       serializer = GameSerializer.new
       serialized_game = serializer.serialize(game)
 
@@ -35,10 +35,10 @@ module JsonAPI
     end
 
     it 'serializes an in progress game' do
-      p1 = Game::Player.create(:human, 'X', 'Player 1')
-      p2 = Game::Player.create(:human, 'O', 'Player 2')
-      board = Game::Board.new(4, ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X', 12, 13, 14, 15, 16])
-      game = Game::Game.new([p1, p2], current_player: 2, board_size: 4, board: board, state: :playing)
+      p1 = TicTacToe::Player.create(:human, 'X', 'Player 1')
+      p2 = TicTacToe::Player.create(:human, 'O', 'Player 2')
+      board = TicTacToe::Board.new(4, ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X', 12, 13, 14, 15, 16])
+      game = TicTacToe::Game.new([p1, p2], current_player: 2, board_size: 4, board: board, state: :playing)
 
       serializer = GameSerializer.new
       serialized_game = serializer.serialize(game)
@@ -53,10 +53,10 @@ module JsonAPI
     end
 
     it 'serializes a tied game' do
-      p1 = Game::Player.create(:human, 'X', 'Player 1')
-      p2 = Game::Player.create(:human, 'O', 'Player 2')
-      board = Game::Board.new(3, ['X', 'X', 'O', 'O', 'O', 'X', 'X', 'O', 'X'])
-      game = Game::Game.new([p1, p2], current_player: 1, board_size: 3, board: board, state: :playing)
+      p1 = TicTacToe::Player.create(:human, 'X', 'Player 1')
+      p2 = TicTacToe::Player.create(:human, 'O', 'Player 2')
+      board = TicTacToe::Board.new(3, ['X', 'X', 'O', 'O', 'O', 'X', 'X', 'O', 'X'])
+      game = TicTacToe::Game.new([p1, p2], current_player: 1, board_size: 3, board: board, state: :playing)
 
       serializer = GameSerializer.new
       serialized_game = serializer.serialize(game)
@@ -68,10 +68,10 @@ module JsonAPI
     end
 
     it 'serializes a won game' do
-      p1 = Game::Player.create(:human, 'X', 'Player 1')
-      p2 = Game::Player.create(:human, 'O', 'Player 2')
-      board = Game::Board.new(3, ['X', 'X', 'X', 'O', 'O', 6, 7, 8, 9])
-      game = Game::Game.new([p1, p2], current_player: 2, board_size: 3, board: board, state: :game_over)
+      p1 = TicTacToe::Player.create(:human, 'X', 'Player 1')
+      p2 = TicTacToe::Player.create(:human, 'O', 'Player 2')
+      board = TicTacToe::Board.new(3, ['X', 'X', 'X', 'O', 'O', 6, 7, 8, 9])
+      game = TicTacToe::Game.new([p1, p2], current_player: 2, board_size: 3, board: board, state: :game_over)
 
       serializer = GameSerializer.new
       serialized_game = serializer.serialize(game)

@@ -1,6 +1,6 @@
 require 'json'
-require 'game/game'
-require 'game/player'
+require 'tictactoe/game'
+require 'tictactoe/player'
 require 'json_api/game_deserializer'
 
 module JsonAPI

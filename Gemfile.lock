@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/AshleyByeUK/tictactoe-ruby-core.git
+  revision: 0ccdfc9ca426eed440929b0c2f995ab67284dbc3
+  specs:
+    tictactoe-ruby-core (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -76,6 +82,7 @@ DEPENDENCIES
   sinatra
   sinatra-contrib
   sinatra-cors (= 1.1.0)
+  tictactoe-ruby-core!
 
 RUBY VERSION
    ruby 2.5.2p104

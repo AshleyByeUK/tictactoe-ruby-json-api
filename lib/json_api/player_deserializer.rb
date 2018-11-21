@@ -1,4 +1,4 @@
-require 'game/player'
+require 'tictactoe/player'
 require 'json_api/errors'
 
 module JsonAPI
@@ -39,7 +39,7 @@ module JsonAPI
     end
 
     def deserialize_player(player)
-      Game::Player.create(player['type'].to_sym, player['token'], player['name'])
+      TicTacToe::Player.create(player['type'].to_sym, player['token'], player['name'])
     end
   end
 end

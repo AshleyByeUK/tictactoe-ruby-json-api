@@ -9,6 +9,7 @@ group :test do
   gem 'rack-test', require: false
 end
 
+gem 'tictactoe-ruby-core', :git => 'https://github.com/AshleyByeUK/tictactoe-ruby-core.git'
 gem 'puma'
 gem 'sinatra'
 gem 'sinatra-contrib'
